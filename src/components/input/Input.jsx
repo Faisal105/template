@@ -1,13 +1,34 @@
-const Input = ({ type = "submit", customClasses = "", ...props }) => {
-	const inputClasses =
-		"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
-	return (
-		<input
-			type={type}
-			className={`${inputClasses} ${customClasses}`}
-			{...props}
-		/>
-	);
+import React from "react";
+
+const Input = ({
+  onChange,
+  value,
+  placeholder = "Enter value",
+  inputType = "text",
+  customClasses = "",
+  ...props
+}) => {
+  let inputClasses = `px-4 py-2 rounded-md text-base transition-colors duration-300 
+		${customClasses}`;
+
+  if (inputType === "text") {
+    inputClasses += " border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+  } else if (inputType === "password") {
+    inputClasses += " border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+  } else if (inputType === "email") {
+    inputClasses += " border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+  }
+
+  return (
+    <input
+      type={inputType}
+      onChange={onChange}
+      value={value}
+      placeholder={placeholder}
+      className={inputClasses}
+      {...props}
+    />
+  );
 };
 
 export default Input;
