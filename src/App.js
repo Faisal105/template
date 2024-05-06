@@ -8,9 +8,12 @@ import {
 
 import ProductDescriptionPage from "./Pages/productDescription/ProductDescriptionPage";
 import ProductListingPage from "./Pages/productListing/ProductListingPage";
+import Header from "./components/header/Header";
 
 function App() {
 	return (
+		<>
+		<Header></Header>
 		<Router>
 			<Routes>
 				<Route path="/" element={<Navigate to="/ProductListingPage" />} />
@@ -21,6 +24,7 @@ function App() {
 				/>
 			</Routes>
 		</Router>
+		</>
 	);
 }
 
