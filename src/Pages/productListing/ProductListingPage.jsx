@@ -6,13 +6,14 @@ import Heading from "../../components/heading/Heading";
 import Image from "../../components/image/Image";
 import Pagination from "../../components/pagination/Pagination";
 import Button from "../../components/button/Button";
+import Filter from "../../components/filter/Filter";
 
 const ProductListingPage = () => {
 	const [products, setProducts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage] = useState(8);
 	const navigate = useNavigate(); // Initialize useHistory hook
-
+	const [selectedFilter, setSelectedFilter] = useState("");
 	useEffect(() => {
 		fetchProducts();
 	}, []);
@@ -46,9 +47,37 @@ const ProductListingPage = () => {
 		navigate(`/ProductDescriptionPage/${productId}`);
 		console.log(`Buying product with ID: ${productId}`);
 	};
+	const handleFilterSelect = (value) => {
+		// Apply sorting/filtering logic based on the selected filter
+		setSelectedFilter(value);
+		// Example logic: sort products by price
+		if (value === "price") {
+			const sortedProducts = [...products].sort((a, b) => a.price - b.price);
+			setProducts(sortedProducts);
+		}
+		// Example logic: sort products alphabetically
+		else if (value === "alphabetically") {
+			const sortedProducts = [...products].sort((a, b) =>
+				a.title.localeCompare(b.title)
+			);
+			setProducts(sortedProducts);
+		}
+		// Example logic: filter products by category
+		else if (value === "category") {
+			// Implement category filtering logic here
+		}
+	};
 
 	return (
 		<>
+			<Filter
+				options={[
+					{ label: "Price", value: "price" },
+					{ label: "Category", value: "category" },
+					{ label: "Alphabetically", value: "alphabetically" },
+				]}
+				onSelect={handleFilterSelect}
+			/>
 			<div className="m-5 grid grid-cols-2 md:grid-cols-4 gap-2">
 				{currentItems.map((product) => (
 					<Card key={product.id}>
