@@ -6,8 +6,11 @@ import {
 } from "react-router-dom";
 
 import ProductDescriptionPage from "./Pages/productDescription/ProductDescriptionPage";
-import ProductListingPage from "./Pages/productListing/ProductListingPage";
+import ProductListingPage, {
+  ProductListingPageLoaders,
+} from "./Pages/productListing/ProductListingPage";
 import Header from "./components/header/Header";
+import ErrorPage from "./Pages/errorPage/ErrorPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,6 +21,8 @@ function App() {
     {
       path: "/ProductListingPage",
       element: <ProductListingPage />,
+      loader: ProductListingPageLoaders,
+      errorElement: <ErrorPage />,
     },
     {
       path: "/ProductDescriptionPage/:productId",

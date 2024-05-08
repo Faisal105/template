@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useHistory hook
+import { useNavigate, useLoaderData } from "react-router-dom"; // Import useHistory hook
 import Card from "../../components/card/Card";
 import Text from "../../components/text/Text";
 import Heading from "../../components/heading/Heading";
@@ -9,25 +9,15 @@ import Button from "../../components/button/Button";
 import Filter from "../../components/filter/Filter";
 
 const ProductListingPage = () => {
+	const loaderData = useLoaderData();
 	const [products, setProducts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage] = useState(8);
 	const navigate = useNavigate(); // Initialize useHistory hook
 	const [selectedFilter, setSelectedFilter] = useState("");
 	useEffect(() => {
-		fetchProducts();
-	}, []);
-
-	const fetchProducts = async () => {
-		try {
-			const response = await fetch("https://fakestoreapi.com/products/");
-			const data = await response.json();
-			console.log(data);
-			setProducts(data);
-		} catch (error) {
-			console.error("Error fetching products:", error);
-		}
-	};
+		setProducts(loaderData);
+	}, [loaderData]);
 
 	const trimTitle = (title) => {
 		return title.length > 17 ? title.substring(0, 17) + "..." : title;
@@ -112,3 +102,12 @@ const ProductListingPage = () => {
 };
 
 export default ProductListingPage;
+export const ProductListingPageLoaders = async () => {
+	try {
+		const response = await fetch("https://fakestoreapi.com/products/");
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		throw Error('No Data Found');
+	}
+};
