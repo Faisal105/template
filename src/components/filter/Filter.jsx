@@ -1,23 +1,25 @@
 import React from "react";
 
-const Filter = ({ options, selectedOption, onSelect }) => {
+const Filter = ({ options, onSelect }) => {
 	return (
-		<div className="flex items-center justify-center space-x-4">
-			<label htmlFor="filter">Filter By:</label>
-			<ul className="flex items-center space-x-4">
-				{options.map((option, index) => (
-					<li
-						key={index}
-						className={`cursor-pointer flex items-center space-x-2`}
-						onClick={() => onSelect(option.value)}>
-						<span
-							className={`w-4 h-4 rounded-full border border-gray-400 ${
-								selectedOption === option.value ? "bg-gray-400" : ""
-							}`}></span>
-						<span>{option.label}</span>
-					</li>
+		<div className="p-2 border rounded-md shadow-md w-32">
+			<label className="block font-bold mb-2">{options.label}</label>
+			<div>
+				{options.filters.map((filter, index) => (
+					<div key={index} className="flex items-center mb-2">
+						<input
+							type="checkbox"
+							id={filter.value}
+							value={filter.value}
+							className="mr-2 cursor-pointer"
+							onChange={() => onSelect(filter.value)}
+						/>
+						<label htmlFor={filter.value} className="cursor-pointer">
+							{filter.label}
+						</label>
+					</div>
 				))}
-			</ul>
+			</div>
 		</div>
 	);
 };

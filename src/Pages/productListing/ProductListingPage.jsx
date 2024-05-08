@@ -7,6 +7,7 @@ import Image from "../../components/image/Image";
 import Pagination from "../../components/pagination/Pagination";
 import Button from "../../components/button/Button";
 import Filter from "../../components/filter/Filter";
+import { filterOptions } from "../../components/filter/FilterOptions";
 
 const ProductListingPage = () => {
 	const [products, setProducts] = useState([]);
@@ -50,34 +51,37 @@ const ProductListingPage = () => {
 	const handleFilterSelect = (value) => {
 		// Apply sorting/filtering logic based on the selected filter
 		setSelectedFilter(value);
-		// Example logic: sort products by price
-		if (value === "price") {
+		if (value === "priceHighToLow") {
+			// Sort products by price in descending order
+			const sortedProducts = [...products].sort((a, b) => b.price - a.price);
+			setProducts(sortedProducts);
+		} else if (value === "priceLowToHigh") {
+			// Sort products by price in ascending order
 			const sortedProducts = [...products].sort((a, b) => a.price - b.price);
 			setProducts(sortedProducts);
-		}
-		// Example logic: sort products alphabetically
-		else if (value === "alphabetically") {
-			const sortedProducts = [...products].sort((a, b) =>
-				a.title.localeCompare(b.title)
-			);
-			setProducts(sortedProducts);
-		}
-		// Example logic: filter products by category
-		else if (value === "category") {
-			// Implement category filtering logic here
+		} else if (value === "category") {
+			// Apply category-based filtering logic
+			// Example: Filter products by category (e.g., Men, Women, Children)
+			// Implement your specific logic here
+		} else if (value === "ratingHighToLow") {
+			// Apply rating-based filtering logic
+			// Example: Filter products by rating (highest to lowest)
+			// Implement your specific logic here
+		} else if (value === "ratingLowToHigh") {
+			// Apply rating-based filtering logic
+			// Example: Filter products by rating (lowest to highest)
+			// Implement your specific logic here
 		}
 	};
 
 	return (
 		<>
-			<Filter
-				options={[
-					{ label: "Price", value: "price" },
-					{ label: "Category", value: "category" },
-					{ label: "Alphabetically", value: "alphabetically" },
-				]}
-				onSelect={handleFilterSelect}
-			/>
+			<>
+				{Object.entries(filterOptions).map(([key, options]) => (
+					<Filter key={key} options={options} onSelect={handleFilterSelect} />
+				))}
+			</>
+
 			<div className="m-5 grid grid-cols-2 md:grid-cols-4 gap-2">
 				{currentItems.map((product) => (
 					<Card key={product.id}>
