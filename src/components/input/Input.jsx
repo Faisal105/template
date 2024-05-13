@@ -8,7 +8,7 @@ const Input = ({
   customClasses = "",
   ...props
 }) => {
-  let inputClasses = `px-4 py-2 rounded-md text-base transition-colors duration-300 
+  let inputClasses = `px-4 py-2 rounded-md text-base transition-colors hover:cursor-pointer duration-300 
 		${customClasses}`;
 
   if (inputType === "text") {

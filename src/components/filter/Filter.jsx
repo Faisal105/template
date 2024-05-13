@@ -1,27 +1,45 @@
-import React from "react";
+import React, { useState } from 'react';
 
-const Filter = ({ options, onSelect }) => {
+const Filters = ({ onApplyFilters, filterConfig }) => {
+	const [filterValues, setFilterValues] = useState({});
+
+	const handleInputChange = (category, value, type) => {
+		setFilterValues(prev => ({
+			...prev,
+			[category]: type === 'checkbox' ? { ...prev[category], [value]: !prev[category]?.[value] } : value
+		}));
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		onApplyFilters(filterValues);
+	};
+
 	return (
-		<div className="p-2 border rounded-md shadow-md w-32">
-			<label className="block font-bold mb-2">{options.label}</label>
-			<div>
-				{options.filters.map((filter, index) => (
-					<div key={index} className="flex items-center mb-2">
-						<input
-							type="checkbox"
-							id={filter.value}
-							value={filter.value}
-							className="mr-2 cursor-pointer"
-							onChange={() => onSelect(filter.value)}
-						/>
-						<label htmlFor={filter.value} className="cursor-pointer">
-							{filter.label}
-						</label>
-					</div>
+		<section className='p-5 bg-[#eee] rounded-lg'>
+			<form onSubmit={handleSubmit} className="space-y-7">
+				{Object.entries(filterConfig).map(([key, { label, type, options }]) => (
+					<article key={key} className='flex flex-col space-y-3'>
+						<h3 className="font-bold">{label}</h3>
+						{options.map(option => (
+							<label key={option.value} className="inline-flex items-center space-x-2">
+								<input
+									type={type === 'checkbox' ? 'checkbox' : 'radio'}
+									name={key}
+									value={option.value}
+									checked={type === 'checkbox' ? filterValues[key]?.[option.value] : filterValues[key] === option.value}
+									onChange={() => handleInputChange(key, option.value, type)}
+									className="focus:ring-0 hover:cursor-pointer"
+								/>
+								<span>{option.label}</span>
+							</label>
+						))}
+					</article>
 				))}
-			</div>
-		</div>
+				<button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Filters</button>
+			</form>
+		</section>
 	);
 };
 
-export default Filter;
+export default Filters;

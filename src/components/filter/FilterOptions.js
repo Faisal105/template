@@ -1,26 +1,23 @@
-// filterOptions.js
-
-export const filterOptions = {
+export const filterConfig = {
 	price: {
 		label: "Price",
-		filters: [
-			{ label: "High to Low", value: "highToLow" },
+		type: "radio",
+		options: [
 			{ label: "Low to High", value: "lowToHigh" },
-		],
+			{ label: "High to Low", value: "highToLow" }
+		]
 	},
 	category: {
 		label: "Category",
-		filters: [
-			{ label: "Men", value: "men" },
-			{ label: "Women", value: "women" },
-			{ label: "Children", value: "children" },
-		],
+		type: "checkbox",
+		options: []
 	},
-	Rating: {
+	rating: {
 		label: "Rating",
-		filters: [
-			{ label: "High to Low", value: "highToLow" },
+		type: "radio",
+		options: [
 			{ label: "Low to High", value: "lowToHigh" },
-		],
-	},
+			{ label: "High to Low", value: "highToLow" }
+		]
+	}
 };
