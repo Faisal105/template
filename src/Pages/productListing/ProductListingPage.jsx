@@ -9,67 +9,89 @@ import Button from "../../components/button/Button";
 import Loader from "../../components/loader/Loader";
 import { filterConfig } from "../../components/filter/FilterOptions";
 import Filters from "../../components/filter/Filter";
+import Counter from "../../components/counter/Counter";
 
 const ProductListingPage = () => {
+	// State variables
 	const loaderData = useLoaderData();
 	const [products, setProducts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filteredProducts, setFilteredProducts] = useState(loaderData);
 
+	// Hooks
 	const navigation = useNavigation();
 	const navigate = useNavigate();
 
+	// Fetch and set products on initial load
 	useEffect(() => {
 		setProducts(loaderData);
 		setFilteredProducts(loaderData);
 
-		filterConfig.category.options = Array.from(new Set(loaderData.map(p => p.category))).map(category => ({
+		// Set up filter options based on loaded data
+		filterConfig.category.options = Array.from(
+			new Set(loaderData.map((p) => p.category))
+		).map((category) => ({
 			label: category,
-			value: category
+			value: category,
 		}));
-
 	}, [loaderData]);
 
+	// Truncate title if too long
 	const trimTitle = (title) => {
 		return title.length > 17 ? title.substring(0, 17) + "..." : title;
 	};
 
+	// Pagination
 	const itemsPerPage = 8;
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
 	const currentItems = products
 		? products.slice(indexOfFirstItem, indexOfLastItem)
 		: [];
 	const totalPages = Math.ceil(products.length / itemsPerPage);
 
+	// Handle page change
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber);
 	};
 
+	// Navigate to Product Description Page
 	const navigateToPDP = (productId) => {
 		navigate(`/ProductDescriptionPage/${productId}`);
 		console.log(`Buying product with ID: ${productId}`);
 	};
 
+	// Apply filters
 	const handleApplyFilters = (filters) => {
 		let filtered = [...products];
 
-		if (filters.category && Object.values(filters.category).some(val => val)) {
-			filtered = filtered.filter(product =>
-				Object.entries(filters.category).some(([key, value]) => value && product.category === key)
+		// Filter by category
+		if (
+			filters.category &&
+			Object.values(filters.category).some((val) => val)
+		) {
+			filtered = filtered.filter((product) =>
+				Object.entries(filters.category).some(
+					([key, value]) => value && product.category === key
+				)
 			);
 		}
 
+		// Sort by price
 		if (filters.price) {
 			filtered.sort((a, b) => {
-				return filters.price === 'lowToHigh' ? a.price - b.price : b.price - a.price;
+				return filters.price === "lowToHigh"
+					? a.price - b.price
+					: b.price - a.price;
 			});
 		}
 
+		// Sort by rating
 		if (filters.rating) {
 			filtered.sort((a, b) => {
-				return filters.rating === 'lowToHigh' ? a.rating.rate - b.rating.rate : b.rating.rate - a.rating.rate;
+				return filters.rating === "lowToHigh"
+					? a.rating.rate - b.rating.rate
+					: b.rating.rate - a.rating.rate;
 			});
 		}
 
@@ -78,19 +100,28 @@ const ProductListingPage = () => {
 
 	return (
 		<>
+			{/* Filter section */}
 			<div className="flex flex-row">
 				<div className="w-1/6 p-4">
-					<Filters onApplyFilters={handleApplyFilters} filterConfig={filterConfig} />
+					{/* Filters component for filtering products */}
+					<Filters
+						onApplyFilters={handleApplyFilters}
+						filterConfig={filterConfig}
+					/>
 				</div>
 
+				{/* Product listing section */}
 				<div className="w-10/12 p-4">
 					{navigation.state === "loading" ? (
 						<Loader />
 					) : (
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
 							{filteredProducts.map((product) => (
-								<Card key={product.id} customClasses="hover:shadow-lg rounded-xl space-y-4" onClick={() => navigateToPDP(product.id)}>
+								<Card
+									key={product.id}
+									customClasses="hover:shadow-lg rounded-xl space-y-4">
 									<div className="w-full h-48 flex items-center justify-center">
+										{/* Product image */}
 										<Image
 											src={product.image}
 											alt={product.title}
@@ -98,15 +129,23 @@ const ProductListingPage = () => {
 										/>
 									</div>
 									<article className="flex flex-col space-y-2">
+										{/* Product details */}
 										<Heading>{trimTitle(product.title)}</Heading>
 										<Text>Price : ${product.price}</Text>
 										<Text>Category : {product.category}</Text>
 										<Text>Rating : {product.rating.rate}</Text>
+										<Counter />
+										{/* Button to navigate to Product Description Page */}
 										<Button
-											label="Buy Now"
+											label="View Details"
 											buttonType="secondary"
 											customClasses=""
 											onClick={() => navigateToPDP(product.id)}
+										/>
+										<Button
+											label="Add To Cart"
+											buttonType="primary"
+											customClasses=""
 										/>
 									</article>
 								</Card>
@@ -116,7 +155,9 @@ const ProductListingPage = () => {
 				</div>
 			</div>
 
+			{/* Pagination section */}
 			<div className="flex justify-center my-4">
+				{/* Pagination component for navigating through pages */}
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPages}
@@ -125,17 +166,18 @@ const ProductListingPage = () => {
 			</div>
 		</>
 	);
-
 };
 
 export default ProductListingPage;
 export const ProductListingPageLoaders = async () => {
 	try {
+		// Fetch product data from API
 		const response = await fetch("https://fakestoreapi.com/products/");
 		const data = await response.json();
 		return data;
 		console.log("data is coming", data);
 	} catch (error) {
+		// Throw error if data retrieval fails
 		throw Error("No Data Found");
 	}
 };
