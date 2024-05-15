@@ -1,3 +1,4 @@
+// ProductListingPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLoaderData, useNavigation } from "react-router-dom";
 import Card from "../../components/card/Card";
@@ -59,6 +60,30 @@ const ProductListingPage = () => {
 	const navigateToPDP = (productId) => {
 		navigate(`/ProductDescriptionPage/${productId}`);
 		console.log(`Buying product with ID: ${productId}`);
+	};
+
+	// Function to handle adding product to cart and navigate to CartPage
+	// State and other code
+
+	// ProductListingPage.jsx
+	const handleAddToCart = (product) => {
+		// Ensure that the product object contains all necessary details
+		const { id, title, price, image, description, category, rating } = product;
+
+		// Create a new product object with all details
+		const productDetails = {
+			id,
+			title,
+			price,
+			image,
+			description,
+			category,
+			rating,
+		};
+
+		// Navigate to CartPage and pass product details as state
+		navigate(`/CartPage`, { state: { product: productDetails } }); // Pass product as state
+		console.log("Adding product to cart", productDetails);
 	};
 
 	// Apply filters
@@ -134,18 +159,14 @@ const ProductListingPage = () => {
 										<Text>Price : ${product.price}</Text>
 										<Text>Category : {product.category}</Text>
 										<Text>Rating : {product.rating.rate}</Text>
+										{/* Counter component for quantity */}
 										<Counter />
-										{/* Button to navigate to Product Description Page */}
-										<Button
-											label="View Details"
-											buttonType="secondary"
-											customClasses=""
-											onClick={() => navigateToPDP(product.id)}
-										/>
+										{/* Button to add product to cart */}
 										<Button
 											label="Add To Cart"
 											buttonType="primary"
 											customClasses=""
+											onClick={() => handleAddToCart(product)}
 										/>
 									</article>
 								</Card>
