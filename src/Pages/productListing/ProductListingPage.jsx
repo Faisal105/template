@@ -1,6 +1,11 @@
 // ProductListingPage.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLoaderData, useNavigation } from "react-router-dom";
+import {
+	useNavigate,
+	useLoaderData,
+	useNavigation,
+	Link,
+} from "react-router-dom";
 import Card from "../../components/card/Card";
 import Text from "../../components/text/Text";
 import Heading from "../../components/heading/Heading";
@@ -54,12 +59,6 @@ const ProductListingPage = () => {
 	// Handle page change
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber);
-	};
-
-	// Navigate to Product Description Page
-	const navigateToPDP = (productId) => {
-		navigate(`/ProductDescriptionPage/${productId}`);
-		console.log(`Buying product with ID: ${productId}`);
 	};
 
 	// Function to handle adding product to cart and navigate to CartPage
@@ -147,11 +146,13 @@ const ProductListingPage = () => {
 									customClasses="hover:shadow-lg rounded-xl space-y-4">
 									<div className="w-full h-48 flex items-center justify-center">
 										{/* Product image */}
-										<Image
-											src={product.image}
-											alt={product.title}
-											customClasses="max-w-full max-h-full object-contain"
-										/>
+										<Link to={`/ProductDescriptionPage/${product.id}`}>
+											<Image
+												src={product.image}
+												alt={product.title}
+												customClasses="max-w-full max-h-full object-contain"
+											/>
+										</Link>
 									</div>
 									<article className="flex flex-col space-y-2">
 										{/* Product details */}
