@@ -4,6 +4,7 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ProductDescriptionPage, {
   ProductDetailPageLoaders,
 } from "./Pages/productDescription/ProductDescriptionPage";
@@ -16,6 +17,38 @@ import CartPage from "./Pages/cartPage/CartPage";
 import Cart from "./components/cart";
 import { CartProvider } from "./contexts/CartContext";
 
+import SignUpPage from "./Pages/signUpPage/SignUpPage";
+
+import LoginPage from "./Pages/loginPage/LoginPage";
+
+import { SignUpAction } from "./Pages/signUpPage/SignUpPage";
+
+import { LoginAction } from "./Pages/loginPage/LoginPage";
+
+ 
+
+const Layout = ({ children }) => {
+
+  const location = useLocation();
+
+  const hideHeaderRoutes = ["/SignUpPage", "/LoginPage"];
+
+ 
+
+  return (
+
+    <>
+
+      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+
+      {children}
+
+    </>
+
+  );
+
+};
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -24,13 +57,29 @@ function App() {
     },
     {
       path: "/ProductListingPage",
-      element: <ProductListingPage />,
+     element: (
+
+        <Layout>
+
+          <ProductListingPage />
+
+        </Layout>
+
+      ),
       loader: ProductListingPageLoaders,
       errorElement: <ErrorPage />,
     },
     {
       path: "/ProductDescriptionPage/:productId",
-      element: <ProductDescriptionPage />,
+      element: (
+
+        <Layout>
+
+          <ProductDescriptionPage />
+
+        </Layout>
+
+      ),
       loader: ProductDetailPageLoaders,
       errorElement: <ErrorPage />,
     },
@@ -38,11 +87,30 @@ function App() {
       path: "/CartPage",
       element: <CartPage />,
     },
+
+    {
+
+      path: "/SignUpPage",
+
+      element: <SignUpPage />,
+
+      action: SignUpAction,
+
+    },
+
+    {
+
+      path: "/LoginPage",
+
+      element: <LoginPage />,
+
+    action: LoginAction,
+
+   },
   ]);
 
   return (
     <CartProvider>
-      <Header />
       <RouterProvider router={router} />
       <Cart />
     </CartProvider>
