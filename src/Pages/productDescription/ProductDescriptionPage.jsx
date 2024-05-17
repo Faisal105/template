@@ -5,7 +5,6 @@ import Heading from "../../components/heading/Heading";
 import Text from "../../components/text/Text";
 import Image from "../../components/image/Image";
 import Loader from "../../components/loader/Loader";
-
 const ProductDescriptionPage = () => {
 	const product = useLoaderData();
 	const navigation = useNavigation();

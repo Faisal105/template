@@ -11,6 +11,7 @@ import { useCart } from '../../contexts/CartContext'
 import { filterConfig } from "../../components/filter/FilterOptions";
 import Filters from "../../components/filter/Filter";
 import Counter from "../../components/counter/Counter";
+import Notification from "../../components/notification/Notification";
 
 const ProductListingPage = () => {
 	// State variables
@@ -19,6 +20,8 @@ const ProductListingPage = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filteredProducts, setFilteredProducts] = useState(loaderData);
 	const [cart, setCart] = useState({}); // Track cart items and quantities
+	//NOtification set
+	const [notification, setNotification] = useState(null);
 
 	// Hooks
 	const navigation = useNavigation();
@@ -55,8 +58,24 @@ const ProductListingPage = () => {
 	};
 
 	// Function to handle adding product to cart
+	// const handleAddToCart = (product) => {
+	// 	addToCart(product)
+	// };
 	const handleAddToCart = (product) => {
-		addToCart(product)
+		const { id, title, price, image, description, category, rating } = product;
+
+		setCart((prevCart) => ({
+			...prevCart,
+			[id]: {
+				...product,
+				quantity: prevCart[id] ? prevCart[id].quantity + 1 : 1,
+			},
+		}));
+			addToCart(product);
+		setNotification({ message: 'Product added to cart', type: 'success' });
+		setTimeout(() => {
+			setNotification(null);
+		}, 3000);
 	};
 
 	// Handle counter change
@@ -75,8 +94,11 @@ const ProductListingPage = () => {
 				};
 			}
 		});
+		setNotification({ message: 'Quantity updated', type: 'info' });
+		setTimeout(() => {
+			setNotification(null);
+		}, 3000);
 	};
-
 	// Apply filters
 	const handleApplyFilters = (filters) => {
 		let filtered = [...products];
@@ -116,6 +138,13 @@ const ProductListingPage = () => {
 
 	return (
 		<>
+			{notification && (
+				<Notification
+					message={notification.message}
+					type={notification.type}
+					onClose={() => setNotification(null)}
+				/>
+			)}
 			{/* Filter section */}
 			<div className="flex flex-row">
 				<div className="w-1/6 p-4">
