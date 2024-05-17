@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLoaderData, useNavigation } from "react-router-dom";
+import { useNavigate, useLoaderData, useNavigation, Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import Text from "../../components/text/Text";
 import Heading from "../../components/heading/Heading";
@@ -22,37 +22,37 @@ const ProductListingPage = () => {
 
 	// Hooks
 	const navigation = useNavigation();
-  	const { addToCart } = useCart(); 
+	const { addToCart } = useCart();
 
-  
-  // Fetch and set products on initial load
-  useEffect(() => {
-    setProducts(loaderData);
-    setFilteredProducts(loaderData);
 
-    // Set up filter options based on loaded data
-    filterConfig.category.options = Array.from(
-      new Set(loaderData.map((p) => p.category))
-    ).map((category) => ({
-      label: category,
-      value: category,
-    }));
+	// Fetch and set products on initial load
+	useEffect(() => {
+		setProducts(loaderData);
+		setFilteredProducts(loaderData);
 
-  }, [loaderData]);
+		// Set up filter options based on loaded data
+		filterConfig.category.options = Array.from(
+			new Set(loaderData.map((p) => p.category))
+		).map((category) => ({
+			label: category,
+			value: category,
+		}));
 
-  // Truncate title if too long
-  const trimTitle = (title) => {
-    return title.length > 17 ? title.substring(0, 17) + "..." : title;
-  };
+	}, [loaderData]);
 
-  // Pagination
-  const itemsPerPage = 8;
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+	// Truncate title if too long
+	const trimTitle = (title) => {
+		return title.length > 17 ? title.substring(0, 17) + "..." : title;
+	};
 
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+	// Pagination
+	const itemsPerPage = 8;
+	const totalPages = Math.ceil(products.length / itemsPerPage);
+
+	// Handle page change
+	const handlePageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	};
 
 	// Function to handle adding product to cart
 	const handleAddToCart = (product) => {
@@ -77,54 +77,54 @@ const ProductListingPage = () => {
 		});
 	};
 
-  // Apply filters
-  const handleApplyFilters = (filters) => {
-    let filtered = [...products];
+	// Apply filters
+	const handleApplyFilters = (filters) => {
+		let filtered = [...products];
 
-    // Filter by category
-    if (
-      filters.category &&
-      Object.values(filters.category).some((val) => val)
-    ) {
-      filtered = filtered.filter((product) =>
-        Object.entries(filters.category).some(
-          ([key, value]) => value && product.category === key
-        )
-      );
-    }
+		// Filter by category
+		if (
+			filters.category &&
+			Object.values(filters.category).some((val) => val)
+		) {
+			filtered = filtered.filter((product) =>
+				Object.entries(filters.category).some(
+					([key, value]) => value && product.category === key
+				)
+			);
+		}
 
-    // Sort by price
-    if (filters.price) {
-      filtered.sort((a, b) => {
-        return filters.price === "lowToHigh"
-          ? a.price - b.price
-          : b.price - a.price;
-      });
-    }
+		// Sort by price
+		if (filters.price) {
+			filtered.sort((a, b) => {
+				return filters.price === "lowToHigh"
+					? a.price - b.price
+					: b.price - a.price;
+			});
+		}
 
-    // Sort by rating
-    if (filters.rating) {
-      filtered.sort((a, b) => {
-        return filters.rating === "lowToHigh"
-          ? a.rating.rate - b.rating.rate
-          : b.rating.rate - a.rating.rate;
-      });
-    }
+		// Sort by rating
+		if (filters.rating) {
+			filtered.sort((a, b) => {
+				return filters.rating === "lowToHigh"
+					? a.rating.rate - b.rating.rate
+					: b.rating.rate - a.rating.rate;
+			});
+		}
 
-    setFilteredProducts(filtered);
-  };
+		setFilteredProducts(filtered);
+	};
 
-  return (
-    <>
-      {/* Filter section */}
-      <div className="flex flex-row">
-        <div className="w-1/6 p-4">
-          {/* Filters component for filtering products */}
-          <Filters
-            onApplyFilters={handleApplyFilters}
-            filterConfig={filterConfig}
-          />
-        </div>
+	return (
+		<>
+			{/* Filter section */}
+			<div className="flex flex-row">
+				<div className="w-1/6 p-4">
+					{/* Filters component for filtering products */}
+					<Filters
+						onApplyFilters={handleApplyFilters}
+						filterConfig={filterConfig}
+					/>
+				</div>
 
 				{/* Product listing section */}
 				<div className="w-10/12 p-4">
@@ -136,20 +136,30 @@ const ProductListingPage = () => {
 								<Card
 									key={product.id}
 									customClasses="hover:shadow-lg rounded-xl space-y-4">
+										<Link
+											to={`/ProductDescriptionPage/${product.id}`}>
 									<div className="w-full h-48 flex items-center justify-center">
 										{/* Product image */}
-										<Image
-											src={product.image}
-											alt={product.title}
-											customClasses="max-w-full max-h-full object-contain"
-										/>
+											<Image
+												src={product.image}
+												alt={product.title}
+												customClasses="max-w-full max-h-full object-contain"
+											/>
 									</div>
+										</Link>
 									<article className="flex flex-col space-y-2">
 										{/* Product details */}
+										<Link
+											to={`/ProductDescriptionPage/${product.id}`}>
+										<div className="flex flex-col space-y-2">
+
 										<Heading>{trimTitle(product.title)}</Heading>
 										<Text>Price : ${product.price}</Text>
 										<Text>Category : {product.category}</Text>
 										<Text>Rating : {product.rating.rate}</Text>
+										</div>
+									</Link>
+
 										{/* Counter component for quantity */}
 										{cart[product.id]?.quantity ? (
 											<Counter
@@ -184,16 +194,16 @@ const ProductListingPage = () => {
 				</div>
 			</div>
 
-      {/* Pagination section */}
-      <div className="flex justify-center my-4">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </>
-  );
+			{/* Pagination section */}
+			<div className="flex justify-center my-4">
+				<Pagination
+					currentPage={currentPage}
+					totalPages={totalPages}
+					onPageChange={handlePageChange}
+				/>
+			</div>
+		</>
+	);
 };
 
 export default ProductListingPage;
