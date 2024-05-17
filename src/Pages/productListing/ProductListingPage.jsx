@@ -1,11 +1,5 @@
-// ProductListingPage.jsx
 import React, { useState, useEffect } from "react";
-import {
-	useNavigate,
-	useLoaderData,
-	useNavigation,
-	Link,
-} from "react-router-dom";
+import { useNavigate, useLoaderData, useNavigation } from "react-router-dom";
 import Card from "../../components/card/Card";
 import Text from "../../components/text/Text";
 import Heading from "../../components/heading/Heading";
@@ -23,6 +17,7 @@ const ProductListingPage = () => {
 	const [products, setProducts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filteredProducts, setFilteredProducts] = useState(loaderData);
+	const [cart, setCart] = useState({}); // Track cart items and quantities
 
 	// Hooks
 	const navigation = useNavigation();
@@ -61,28 +56,35 @@ const ProductListingPage = () => {
 		setCurrentPage(pageNumber);
 	};
 
-	// Function to handle adding product to cart and navigate to CartPage
-	// State and other code
-
-	// ProductListingPage.jsx
+	// Function to handle adding product to cart
 	const handleAddToCart = (product) => {
-		// Ensure that the product object contains all necessary details
 		const { id, title, price, image, description, category, rating } = product;
 
-		// Create a new product object with all details
-		const productDetails = {
-			id,
-			title,
-			price,
-			image,
-			description,
-			category,
-			rating,
-		};
+		setCart((prevCart) => ({
+			...prevCart,
+			[id]: {
+				...product,
+				quantity: prevCart[id] ? prevCart[id].quantity + 1 : 1,
+			},
+		}));
+	};
 
-		// Navigate to CartPage and pass product details as state
-		navigate(`/CartPage`, { state: { product: productDetails } }); // Pass product as state
-		console.log("Adding product to cart", productDetails);
+	// Handle counter change
+	const handleCounterChange = (productId, newQuantity) => {
+		setCart((prevCart) => {
+			if (newQuantity === 0) {
+				const { [productId]: _, ...remainingItems } = prevCart;
+				return remainingItems;
+			} else {
+				return {
+					...prevCart,
+					[productId]: {
+						...prevCart[productId],
+						quantity: newQuantity,
+					},
+				};
+			}
+		});
 	};
 
 	// Apply filters
@@ -146,13 +148,11 @@ const ProductListingPage = () => {
 									customClasses="hover:shadow-lg rounded-xl space-y-4">
 									<div className="w-full h-48 flex items-center justify-center">
 										{/* Product image */}
-										<Link to={`/ProductDescriptionPage/${product.id}`}>
-											<Image
-												src={product.image}
-												alt={product.title}
-												customClasses="max-w-full max-h-full object-contain"
-											/>
-										</Link>
+										<Image
+											src={product.image}
+											alt={product.title}
+											customClasses="max-w-full max-h-full object-contain"
+										/>
 									</div>
 									<article className="flex flex-col space-y-2">
 										{/* Product details */}
@@ -161,14 +161,31 @@ const ProductListingPage = () => {
 										<Text>Category : {product.category}</Text>
 										<Text>Rating : {product.rating.rate}</Text>
 										{/* Counter component for quantity */}
-										<Counter />
-										{/* Button to add product to cart */}
-										<Button
-											label="Add To Cart"
-											buttonType="primary"
-											customClasses=""
-											onClick={() => handleAddToCart(product)}
-										/>
+										{cart[product.id]?.quantity ? (
+											<Counter
+												quantity={cart[product.id].quantity}
+												onIncrease={() =>
+													handleCounterChange(
+														product.id,
+														cart[product.id].quantity + 1
+													)
+												}
+												onDecrease={() =>
+													handleCounterChange(
+														product.id,
+														cart[product.id].quantity - 1
+													)
+												}
+											/>
+										) : (
+											/* Button to add product to cart */
+											<Button
+												label="Add To Cart"
+												buttonType="primary"
+												customClasses=""
+												onClick={() => handleAddToCart(product)}
+											/>
+										)}
 									</article>
 								</Card>
 							))}
@@ -191,13 +208,14 @@ const ProductListingPage = () => {
 };
 
 export default ProductListingPage;
+
 export const ProductListingPageLoaders = async () => {
 	try {
 		// Fetch product data from API
 		const response = await fetch("https://fakestoreapi.com/products/");
 		const data = await response.json();
-		return data;
 		console.log("data is coming", data);
+		return data;
 	} catch (error) {
 		// Throw error if data retrieval fails
 		throw Error("No Data Found");

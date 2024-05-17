@@ -1,28 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Counter = () => {
-	// State to hold the quantity
-	const [quantity, setQuantity] = useState(0);
-
-	// Function to handle increase in quantity
-	const increaseQuantity = (e) => {
-		e.preventDefault(); // Prevent default form submission
-		setQuantity(quantity + 1);
-	};
-
-	// Function to handle decrease in quantity
-	const decreaseQuantity = (e) => {
-		e.preventDefault(); // Prevent default form submission
-		if (quantity > 0) {
-			setQuantity(quantity - 1);
-		}
-	};
-
+const Counter = ({ quantity, onIncrease, onDecrease }) => {
 	return (
 		<div className="flex items-center border border-gray-300 rounded-md px-3 py-1 justify-between">
 			{/* Button to decrease quantity */}
 			<button
-				onClick={decreaseQuantity}
+				onClick={(e) => {
+					e.preventDefault();
+					onDecrease();
+				}}
 				className="text-gray-500 focus:outline-none">
 				{/* Tailwind CSS icon for minus */}
 				<svg
@@ -43,7 +29,10 @@ const Counter = () => {
 			<span className="mx-2">{quantity}</span>
 			{/* Button to increase quantity */}
 			<button
-				onClick={increaseQuantity}
+				onClick={(e) => {
+					e.preventDefault();
+					onIncrease();
+				}}
 				className="text-gray-500 focus:outline-none">
 				{/* Tailwind CSS icon for plus */}
 				<svg
