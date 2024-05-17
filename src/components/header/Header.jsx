@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useCart } from "../../contexts/CartContext"; 
 
 const Header = () => {
 
+  const { toggleCart } = useCart();
+
   const menuItems = [
-    { label: 'Home', link: '#' },
+    { label: 'Home', link: '/' },
     { label: 'Categories', subcategories: ['Men', 'Women', 'Children'] },
     { label: 'Services', link: '#' },
     { label: 'About', link: '#' }
@@ -32,7 +35,9 @@ const Header = () => {
                   <a href={menuItem.link} className="text-white py-1 hover:underline text-lg" style={{ cursor: 'pointer' }}>{menuItem.label}</a>
                   <ul className="absolute hidden group-hover:block bg-gray-600 py-1 rounded-md border border-white">
                     {menuItem.subcategories.map((subcategory, subIndex) => (
-                      <li key={subIndex}><a href="#" className="text-white px-4 py-2 block hover:underline">{subcategory}</a></li>
+                      <li key={subIndex}>
+                        <button className="text-white px-4 py-2 block hover:underline">{subcategory}</button>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -44,11 +49,14 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex items-center">
-        <button className="bg-transparent text-white mr-4 text-lg">
-          <svg className="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M9 18a2 2 0 0 0 4 0h5V5a2 2 0 0 0-2-2H6.618l-.351-1.054A1 1 0 0 0 5.294 1H1v2h3.412l3.764 11.292A2 2 0 0 0 9 18zm3-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-6-6V7a1 1 0 1 1 2 0v1h9V7a1 1 0 1 1 2 0v1h2a1 1 0 0 0 0-2H4z"/>
-          </svg>
-        </button>
+        <div className='relative'>
+          <button className="bg-transparent text-white mr-4 text-lg" onClick={toggleCart}>
+            <svg className="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M9 18a2 2 0 0 0 4 0h5V5a2 2 0 0 0-2-2H6.618l-.351-1.054A1 1 0 0 0 5.294 1H1v2h3.412l3.764 11.292A2 2 0 0 0 9 18zm3-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-6-6V7a1 1 0 1 1 2 0v1h9V7a1 1 0 1 1 2 0v1h2a1 1 0 0 0 0-2H4z"/>
+            </svg>
+          </button>
+        </div>
+        
         
         <button className="bg-transparent text-white text-lg" onClick={handleToggleLogin}>
           {isLoggedIn ? 'Logout' : 'Login'}

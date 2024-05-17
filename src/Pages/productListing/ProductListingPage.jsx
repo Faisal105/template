@@ -7,6 +7,7 @@ import Image from "../../components/image/Image";
 import Pagination from "../../components/pagination/Pagination";
 import Button from "../../components/button/Button";
 import Loader from "../../components/loader/Loader";
+import { useCart } from '../../contexts/CartContext'
 import { filterConfig } from "../../components/filter/FilterOptions";
 import Filters from "../../components/filter/Filter";
 import Counter from "../../components/counter/Counter";
@@ -21,52 +22,41 @@ const ProductListingPage = () => {
 
 	// Hooks
 	const navigation = useNavigation();
-	const navigate = useNavigate();
+  	const { addToCart } = useCart(); 
 
-	// Fetch and set products on initial load
-	useEffect(() => {
-		setProducts(loaderData);
-		setFilteredProducts(loaderData);
+  
+  // Fetch and set products on initial load
+  useEffect(() => {
+    setProducts(loaderData);
+    setFilteredProducts(loaderData);
 
-		// Set up filter options based on loaded data
-		filterConfig.category.options = Array.from(
-			new Set(loaderData.map((p) => p.category))
-		).map((category) => ({
-			label: category,
-			value: category,
-		}));
-	}, [loaderData]);
+    // Set up filter options based on loaded data
+    filterConfig.category.options = Array.from(
+      new Set(loaderData.map((p) => p.category))
+    ).map((category) => ({
+      label: category,
+      value: category,
+    }));
 
-	// Truncate title if too long
-	const trimTitle = (title) => {
-		return title.length > 17 ? title.substring(0, 17) + "..." : title;
-	};
+  }, [loaderData]);
 
-	// Pagination
-	const itemsPerPage = 8;
-	const indexOfLastItem = currentPage * itemsPerPage;
-	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-	const currentItems = products
-		? products.slice(indexOfFirstItem, indexOfLastItem)
-		: [];
-	const totalPages = Math.ceil(products.length / itemsPerPage);
+  // Truncate title if too long
+  const trimTitle = (title) => {
+    return title.length > 17 ? title.substring(0, 17) + "..." : title;
+  };
 
-	// Handle page change
-	const handlePageChange = (pageNumber) => {
-		setCurrentPage(pageNumber);
-	};
+  // Pagination
+  const itemsPerPage = 8;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
 	// Function to handle adding product to cart
 	const handleAddToCart = (product) => {
-		const { id, title, price, image, description, category, rating } = product;
-
-		setCart((prevCart) => ({
-			...prevCart,
-			[id]: {
-				...product,
-				quantity: prevCart[id] ? prevCart[id].quantity + 1 : 1,
-			},
-		}));
+		addToCart(product)
 	};
 
 	// Handle counter change
@@ -87,54 +77,54 @@ const ProductListingPage = () => {
 		});
 	};
 
-	// Apply filters
-	const handleApplyFilters = (filters) => {
-		let filtered = [...products];
+  // Apply filters
+  const handleApplyFilters = (filters) => {
+    let filtered = [...products];
 
-		// Filter by category
-		if (
-			filters.category &&
-			Object.values(filters.category).some((val) => val)
-		) {
-			filtered = filtered.filter((product) =>
-				Object.entries(filters.category).some(
-					([key, value]) => value && product.category === key
-				)
-			);
-		}
+    // Filter by category
+    if (
+      filters.category &&
+      Object.values(filters.category).some((val) => val)
+    ) {
+      filtered = filtered.filter((product) =>
+        Object.entries(filters.category).some(
+          ([key, value]) => value && product.category === key
+        )
+      );
+    }
 
-		// Sort by price
-		if (filters.price) {
-			filtered.sort((a, b) => {
-				return filters.price === "lowToHigh"
-					? a.price - b.price
-					: b.price - a.price;
-			});
-		}
+    // Sort by price
+    if (filters.price) {
+      filtered.sort((a, b) => {
+        return filters.price === "lowToHigh"
+          ? a.price - b.price
+          : b.price - a.price;
+      });
+    }
 
-		// Sort by rating
-		if (filters.rating) {
-			filtered.sort((a, b) => {
-				return filters.rating === "lowToHigh"
-					? a.rating.rate - b.rating.rate
-					: b.rating.rate - a.rating.rate;
-			});
-		}
+    // Sort by rating
+    if (filters.rating) {
+      filtered.sort((a, b) => {
+        return filters.rating === "lowToHigh"
+          ? a.rating.rate - b.rating.rate
+          : b.rating.rate - a.rating.rate;
+      });
+    }
 
-		setFilteredProducts(filtered);
-	};
+    setFilteredProducts(filtered);
+  };
 
-	return (
-		<>
-			{/* Filter section */}
-			<div className="flex flex-row">
-				<div className="w-1/6 p-4">
-					{/* Filters component for filtering products */}
-					<Filters
-						onApplyFilters={handleApplyFilters}
-						filterConfig={filterConfig}
-					/>
-				</div>
+  return (
+    <>
+      {/* Filter section */}
+      <div className="flex flex-row">
+        <div className="w-1/6 p-4">
+          {/* Filters component for filtering products */}
+          <Filters
+            onApplyFilters={handleApplyFilters}
+            filterConfig={filterConfig}
+          />
+        </div>
 
 				{/* Product listing section */}
 				<div className="w-10/12 p-4">
@@ -194,17 +184,16 @@ const ProductListingPage = () => {
 				</div>
 			</div>
 
-			{/* Pagination section */}
-			<div className="flex justify-center my-4">
-				{/* Pagination component for navigating through pages */}
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={handlePageChange}
-				/>
-			</div>
-		</>
-	);
+      {/* Pagination section */}
+      <div className="flex justify-center my-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+    </>
+  );
 };
 
 export default ProductListingPage;
@@ -217,7 +206,7 @@ export const ProductListingPageLoaders = async () => {
 		console.log("data is coming", data);
 		return data;
 	} catch (error) {
-		// Throw error if data retrieval fails
+		// Throw error if data retrieval fails 
 		throw Error("No Data Found");
 	}
 };

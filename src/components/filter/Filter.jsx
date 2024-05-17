@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Filters = ({ onApplyFilters, filterConfig }) => {
 	const [filterValues, setFilterValues] = useState({});
@@ -9,6 +9,16 @@ const Filters = ({ onApplyFilters, filterConfig }) => {
 			[category]: type === 'checkbox' ? { ...prev[category], [value]: !prev[category]?.[value] } : value
 		}));
 	};
+
+	useEffect(() => {
+		onApplyFilters(filterValues);
+	}, [filterValues]);
+
+	const handleClearFilters = () => {
+		setFilterValues({});
+		handleInputChange();
+		onApplyFilters(filterValues);
+	}
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -36,7 +46,8 @@ const Filters = ({ onApplyFilters, filterConfig }) => {
 						))}
 					</article>
 				))}
-				<button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Filters</button>
+					<button className='underline text-blue-500 text-base' onClick={handleClearFilters}>Clear Filters</button>
+					{/* <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Filters</button> */}
 			</form>
 		</section>
 	);

@@ -1,0 +1,8 @@
+#cart::-webkit-scrollbar {
+  display: none;
+}
+
+#cart {
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+}
