@@ -1,15 +1,15 @@
 import "./App.css";
 import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
+	createBrowserRouter,
+	RouterProvider,
+	Navigate,
 } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ProductDescriptionPage, {
-  ProductDetailPageLoaders,
+	ProductDetailPageLoaders,
 } from "./Pages/productDescription/ProductDescriptionPage";
 import ProductListingPage, {
-  ProductListingPageLoaders,
+	ProductListingPageLoaders,
 } from "./Pages/productListing/ProductListingPage";
 import Header from "./components/header/Header";
 import ErrorPage from "./Pages/errorPage/ErrorPage";
@@ -24,97 +24,86 @@ import LoginPage from "./Pages/loginPage/LoginPage";
 import { SignUpAction } from "./Pages/signUpPage/SignUpPage";
 
 import { LoginAction } from "./Pages/loginPage/LoginPage";
-
- 
+import Home from "./Pages/home/Home";
 
 const Layout = ({ children }) => {
+	const location = useLocation();
 
-  const location = useLocation();
+	const hideHeaderRoutes = ["/SignUpPage", "/LoginPage"];
 
-  const hideHeaderRoutes = ["/SignUpPage", "/LoginPage"];
+	return (
+		<>
+			{!hideHeaderRoutes.includes(location.pathname) && <Header />}
 
- 
-
-  return (
-
-    <>
-
-      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-
-      {children}
-
-    </>
-
-  );
-
+			{children}
+		</>
+	);
 };
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Navigate to="/ProductListingPage" />,
-    },
-    {
-      path: "/ProductListingPage",
-     element: (
+	const router = createBrowserRouter([
+		{
+			path: "/",
+			element: <Navigate to="/Home" />,
+		},
+		{
+			path: "/Home",
+			element: (
+				<Layout>
+					<Home />
+				</Layout>
+			),
+			loader: ProductListingPageLoaders,
+			errorElement: <ErrorPage />,
+		},
+		{
+			path: "/ProductListingPage",
+			element: (
+				<Layout>
+					<ProductListingPage />
+				</Layout>
+			),
+			loader: ProductListingPageLoaders,
+			errorElement: <ErrorPage />,
+		},
+		{
+			path: "/ProductDescriptionPage/:productId",
+			element: (
+				<Layout>
+					<ProductDescriptionPage />
+				</Layout>
+			),
+			loader: ProductDetailPageLoaders,
+			errorElement: <ErrorPage />,
+		},
+		{
+			path: "/CartPage",
+			element: <CartPage />,
+		},
 
-        <Layout>
+		{
+			path: "/SignUpPage",
 
-          <ProductListingPage />
+			element: <SignUpPage />,
 
-        </Layout>
+			action: SignUpAction,
+		},
 
-      ),
-      loader: ProductListingPageLoaders,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/ProductDescriptionPage/:productId",
-      element: (
+		{
+			path: "/LoginPage",
 
-        <Layout>
+			element: <LoginPage />,
 
-          <ProductDescriptionPage />
+			action: LoginAction,
+		},
+	]);
 
-        </Layout>
-
-      ),
-      loader: ProductDetailPageLoaders,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/CartPage",
-      element: <CartPage />,
-    },
-
-    {
-
-      path: "/SignUpPage",
-
-      element: <SignUpPage />,
-
-      action: SignUpAction,
-
-    },
-
-    {
-
-      path: "/LoginPage",
-
-      element: <LoginPage />,
-
-    action: LoginAction,
-
-   },
-  ]);
-
-  return (
-    <CartProvider>
-      <RouterProvider router={router} />
-      <Cart />
-    </CartProvider>
-  );
+	return (
+		<CartProvider>
+			<RouterProvider router={router} />
+			<Cart />
+		</CartProvider>
+	);
 }
 
 export default App;
