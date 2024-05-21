@@ -1,6 +1,7 @@
 import React from "react";
 import { menuItems } from "./HeaderConfig";
 import { useCart } from "../../contexts/CartContext"; 
+import { Link } from "react-router-dom";
  
 // Header component definition
 const Header = () => {
@@ -32,7 +33,7 @@ const Header = () => {
             />
           </svg>
           {/* Website title */}
-          <h1 className="text-white text-lg font-semibold">Fashion Shop</h1>
+          <Link to={'/home'} className="text-white text-lg font-semibold">Fashion Shop</Link>
         </div>
         {/* Search form */}
         <form className="flex items-center mx-4" onSubmit={handleSearch}>
@@ -86,13 +87,13 @@ const Header = () => {
             <li key={index} className="mx-4 relative">
               {menuItem.subcategories ? (
                 <div className="group relative">
-                  <a
-                    href={menuItem.link}
+                  <Link
+                    to={menuItem.link}
                     className="text-white py-1 hover:underline text-lg"
                     style={{ cursor: "pointer" }}
                   >
                     {menuItem.label}
-                  </a>
+                  </Link>
                   {/* Dropdown menu for subcategories */}
                   <ul className="absolute hidden group-hover:block bg-gray-600 py-1 rounded-md border border-white">
                     {menuItem.subcategories.map((subcategory, subIndex) => (
