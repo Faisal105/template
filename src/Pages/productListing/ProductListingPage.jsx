@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLoaderData, useNavigation, Link } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import Card from "../../components/card/Card";
 import Text from "../../components/text/Text";
 import Heading from "../../components/heading/Heading";
@@ -17,30 +17,27 @@ const ProductListingPage = () => {
 	// State variables
 	const loaderData = useLoaderData();
 	const [products, setProducts] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filteredProducts, setFilteredProducts] = useState(loaderData);
-	const [cart, setCart] = useState({}); // Track cart items and quantities
-	//NOtification set
 	const [notification, setNotification] = useState(null);
-
-	// Hooks
-	const navigation = useNavigation();
-	const { addToCart } = useCart();
+	const { cartItems, addToCart , removeFromCart } = useCart();
 
 
 	// Fetch and set products on initial load
 	useEffect(() => {
+		setIsLoading(true);
 		setProducts(loaderData);
 		setFilteredProducts(loaderData);
 
-		// Set up filter options based on loaded data
+		// Getting Categories From Api
 		filterConfig.category.options = Array.from(
 			new Set(loaderData.map((p) => p.category))
 		).map((category) => ({
 			label: category,
 			value: category,
 		}));
-
+		setIsLoading(false);
 	}, [loaderData]);
 
 	// Truncate title if too long
@@ -57,48 +54,30 @@ const ProductListingPage = () => {
 		setCurrentPage(pageNumber);
 	};
 
-	// Function to handle adding product to cart
-	// const handleAddToCart = (product) => {
-	// 	addToCart(product)
-	// };
 	const handleAddToCart = (product) => {
-		const { id, title, price, image, description, category, rating } = product;
-
-		setCart((prevCart) => ({
-			...prevCart,
-			[id]: {
-				...product,
-				quantity: prevCart[id] ? prevCart[id].quantity + 1 : 1,
-			},
-		}));
-			addToCart(product);
+		addToCart(product);
 		setNotification({ message: 'Product added to cart', type: 'success' });
 		setTimeout(() => {
 			setNotification(null);
-		}, 3000);
+		}, 1000);
 	};
 
-	// Handle counter change
-	const handleCounterChange = (productId, newQuantity) => {
-		setCart((prevCart) => {
-			if (newQuantity === 0) {
-				const { [productId]: _, ...remainingItems } = prevCart;
-				return remainingItems;
-			} else {
-				return {
-					...prevCart,
-					[productId]: {
-						...prevCart[productId],
-						quantity: newQuantity,
-					},
-				};
-			}
-		});
+	const handleIncrease = (product) => {
+		addToCart(product)
 		setNotification({ message: 'Quantity updated', type: 'info' });
 		setTimeout(() => {
 			setNotification(null);
-		}, 3000);
-	};
+		}, 800);
+	} 
+
+	const handleDecrease= (productID) => {
+		removeFromCart(productID)
+		setNotification({ message: 'Quantity updated', type: 'info' });
+		setTimeout(() => {
+			setNotification(null);
+		}, 800);
+	} 
+
 	// Apply filters
 	const handleApplyFilters = (filters) => {
 		let filtered = [...products];
@@ -157,7 +136,7 @@ const ProductListingPage = () => {
 
 				{/* Product listing section */}
 				<div className="w-10/12 p-4">
-					{navigation.state === "loading" ? (
+					{isLoading ? (
 						<Loader />
 					) : (
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
@@ -190,31 +169,19 @@ const ProductListingPage = () => {
 									</Link>
 
 										{/* Counter component for quantity */}
-										{cart[product.id]?.quantity ? (
+										{cartItems.some(item => item.id === product.id) ? (
 											<Counter
-												quantity={cart[product.id].quantity}
-												onIncrease={() =>
-													handleCounterChange(
-														product.id,
-														cart[product.id].quantity + 1
-													)
-												}
-												onDecrease={() =>
-													handleCounterChange(
-														product.id,
-														cart[product.id].quantity - 1
-													)
-												}
+												quantity={cartItems.find(item => item.id === product.id).quantity}
+												onIncrease={() => handleIncrease(product)}
+												onDecrease={() => handleDecrease(product.id)}
 											/>
-										) : (
-											/* Button to add product to cart */
+											) : (
 											<Button
 												label="Add To Cart"
 												buttonType="primary"
-												customClasses=""
 												onClick={() => handleAddToCart(product)}
 											/>
-										)}
+											)}
 									</article>
 								</Card>
 							))}
