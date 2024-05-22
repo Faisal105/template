@@ -4,7 +4,7 @@ import Image from "../image/Image";
 import { redirect } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems, isCartOpen, toggleCart, removeFromCart } = useCart();
+  const { cartItems, isCartOpen, deleteFromCart, toggleCart, removeFromCart } = useCart();
 
   const handleOnclick = () => { 
       redirect('/CartPage')
@@ -13,28 +13,11 @@ const Cart = () => {
   return (
     <>
       <div
-        className="fixed inset-0"
-        style={{
-          display: isCartOpen ? "block" : "none",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          zIndex: 1000,
-        }}
+        className={`fixed inset-0 bg-[rgba(0,0,0,0.5)] z-50 ${isCartOpen ? "block" : "none"}`}
         onClick={toggleCart}
       />
       <div
-        style={{
-          position: "fixed",
-          top: 0,
-          right: isCartOpen ? 0 : "-100%",
-          width: "500px",
-          height: "100%",
-          backgroundColor: "white",
-          transition: "right 0.3s ease",
-          padding: "25px",
-          boxSizing: "border-box",
-          zIndex: 1001,
-        }}
-      >
+      className={`fixed top-0 right-[${isCartOpen ? 0 : "-100%"}] w-[500px] h-full bg-white transition duration-300 ease box-border p-6 z-50`}>
         <div className="flex justify-between items-center mb-4">
           <h2>Cart</h2>
           <button className="text-red-600 text-sm" onClick={toggleCart}>
@@ -63,7 +46,7 @@ const Cart = () => {
                 <td className="py-3 px-3">x{item.quantity}</td>
                 <td className="py-3 px-3">${(item.price * item.quantity).toFixed(2)}</td>
                 <td className="py-3 pl-3 text-right"> <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => deleteFromCart(item.id)}
                     className="text-red-500"
                   >
                     <svg
