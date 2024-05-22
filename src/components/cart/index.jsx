@@ -13,27 +13,11 @@ const Cart = () => {
   return (
     <>
       <div
-        className="fixed inset-0"
-        style={{
-          display: isCartOpen ? "block" : "none",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          zIndex: 1000,
-        }}
+        className={`fixed inset-0 z-50 ${isCartOpen ? 'block' : 'hidden'} bg-black bg-opacity-50`}
         onClick={toggleCart}
       />
       <div
-        style={{
-          position: "fixed",
-          top: 0,
-          right: isCartOpen ? 0 : "-100%",
-          width: "500px",
-          height: "100%",
-          backgroundColor: "white",
-          transition: "right 0.3s ease",
-          padding: "25px",
-          boxSizing: "border-box",
-          zIndex: 1001,
-        }}
+        className={`fixed top-0 ${isCartOpen ? 'right-0' : '-right-full'} w-[500px] h-full bg-white transition-right duration-300 ease-in-out p-6 box-border z-50`}
       >
         <div className="flex justify-between items-center mb-4">
           <h2>Cart</h2>
