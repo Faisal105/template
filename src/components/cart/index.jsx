@@ -4,7 +4,7 @@ import Image from "../image/Image";
 import { redirect } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems, isCartOpen, toggleCart, removeFromCart } = useCart();
+  const { cartItems, isCartOpen, toggleCart, removeFromCart , deleteFromCart } = useCart();
 
   const handleOnclick = () => { 
       redirect('/CartPage')
@@ -63,7 +63,7 @@ const Cart = () => {
                 <td className="py-3 px-3">x{item.quantity}</td>
                 <td className="py-3 px-3">${(item.price * item.quantity).toFixed(2)}</td>
                 <td className="py-3 pl-3 text-right"> <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => deleteFromCart(item.id)}
                     className="text-red-500"
                   >
                     <svg
