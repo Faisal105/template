@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Card from "../card/Card";
+import Heading from "../heading/Heading";
+import Text from "../text/Text";
+import Image from "../image/Image";
+import Button from "../button/Button";
 
-const Carousel = ({ images, heading }) => {
+const Carousel = ({ images, heading, products }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const itemsToShow = 4;
 
@@ -20,16 +26,36 @@ const Carousel = ({ images, heading }) => {
 		<div className="flex flex-col items-center justify-center w-full">
 			<h2 className="text-2xl font-bold mb-4 text-center">{heading}</h2>
 			<div className="relative w-full">
-				<div className="flex overflow-hidden">
-					{images
+				<div className="flex justify-around gap-10 overflow-hidden">
+					{products
 						.slice(currentIndex, currentIndex + itemsToShow)
-						.map((image, index) => (
-							<img
-								key={index}
-								src={image}
-								alt={`Slide ${currentIndex + index}`}
-								className="w-1/4 h-40 md:h-64 object-cover mx-2"
-							/>
+						.map((product, index) => (
+							<Card
+								key={product.id}
+								customClasses="hover:shadow-lg w-96 rounded-xl space-y-4">
+								<Link
+									to={`/ProductDescriptionPage/${product.id}`}>
+									<div className="w-full h-48 flex items-center justify-center">
+										{/* Product image */}
+										<Image
+											src={product.image}
+											alt={product.title}
+											customClasses="max-w-full max-h-full object-contain"
+										/>
+									</div>
+								</Link>
+								<article className="flex flex-col space-y-2">
+									{/* Product details */}
+									<Link
+										to={`/ProductDescriptionPage/${product.id}`}>
+										<div className="flex flex-col space-y-2">
+
+											<Heading>{product.title}</Heading>
+											<Text>Price : ${product.price}</Text>
+										</div>
+									</Link>
+								</article>
+							</Card>
 						))}
 				</div>
 				<button
@@ -72,11 +98,10 @@ const Carousel = ({ images, heading }) => {
 					(_, index) => (
 						<div
 							key={index}
-							className={`w-3 h-3 mx-1 rounded-full ${
-								index === Math.floor(currentIndex / itemsToShow)
+							className={`w-3 h-3 mx-1 rounded-full ${index === Math.floor(currentIndex / itemsToShow)
 									? "bg-blue-500"
 									: "bg-gray-300"
-							}`}
+								}`}
 						/>
 					)
 				)}
