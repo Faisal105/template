@@ -40,15 +40,9 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-    const deleteFromCart = (id) => {
-    setCartItems((currentItems) =>
-    currentItems.filter((item) => item.id !== id))
-    };
-
-
   return (
     <CartContext.Provider
-      value={{ cartItems, isCartOpen, addToCart, removeFromCart, deleteFromCart, toggleCart }}
+      value={{ cartItems, isCartOpen, addToCart, removeFromCart, toggleCart }}
     >
       {children}
     </CartContext.Provider>

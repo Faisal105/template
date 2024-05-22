@@ -89,7 +89,8 @@ const Header = () => {
                 <div className="group relative">
                   <Link
                     to={menuItem.link}
-                    className="text-white py-1 hover:underline text-lg cursor-pointer"
+                    className="text-white py-1 hover:underline text-lg"
+                    style={{ cursor: "pointer" }}
                   >
                     {menuItem.label}
                   </Link>
@@ -109,7 +110,8 @@ const Header = () => {
               ) : (
                 <a
                   href={menuItem.link}
-                  className="text-white hover:underline text-lg cursor-pointer"
+                  className="text-white hover:underline text-lg"
+                  style={{ cursor: "pointer" }}
                 >
                   {menuItem.label}
                 </a>
