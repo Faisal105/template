@@ -9,11 +9,11 @@ const InfoBanner = () => {
     ];
 
     return (
-        <div className="bg-gray-300 flex justify-between items-center p-4">
+        <div className="bg-gray-300 flex justify-between items-center p-14">
             {bannerItems.map(item => (
                 <div key={item.id} className="text-center flex flex-col items-center justify-center">
-                    <span className="text-4xl font-bold text-white">{item.number}</span>
-                    <span className="text-sm text-white">{item.description}</span>
+                    <span className="text-5xl font-bold text-white">{item.number}</span>
+                    <span className="text-base text-white">{item.description}</span>
                 </div>
             ))}
         </div>

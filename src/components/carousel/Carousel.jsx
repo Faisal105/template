@@ -6,19 +6,19 @@ import Text from "../text/Text";
 import Image from "../image/Image";
 import Button from "../button/Button";
 
-const Carousel = ({ images, heading, products }) => {
+const Carousel = ({ heading, products }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const itemsToShow = 4;
 
 	const handlePrevious = () => {
 		setCurrentIndex((prevIndex) =>
-			prevIndex === 0 ? Math.max(images.length - itemsToShow, 0) : prevIndex - 1
+			prevIndex === 0 ? Math.max(products.length - itemsToShow, 0) : prevIndex - 1
 		);
 	};
 
 	const handleNext = () => {
 		setCurrentIndex((prevIndex) =>
-			prevIndex >= images.length - itemsToShow ? 0 : prevIndex + 1
+			prevIndex >= products.length - itemsToShow ? 0 : prevIndex + 1
 		);
 	};
 
@@ -94,7 +94,7 @@ const Carousel = ({ images, heading, products }) => {
 				</button>
 			</div>
 			<div className="flex mt-4">
-				{Array.from({ length: Math.ceil(images.length / itemsToShow) }).map(
+				{Array.from({ length: Math.ceil(products.length / itemsToShow) }).map(
 					(_, index) => (
 						<div
 							key={index}
