@@ -1,13 +1,31 @@
-import React from 'react';
-import { Link, Form, useActionData, redirect } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, Form, useActionData } from 'react-router-dom';
 import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import Notification from '../../components/notification/Notification';
 import './SignUp.css';
 import { signupConfig } from './SignUpPageConfig';
- 
+
 const SignUpPage = () => {
   const actionData = useActionData();
- 
-  // Function to dynamically render input fields based on configuration
+  const formRef = useRef(null);
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    // Handle successful signup
+    if (actionData?.success) {
+      setNotification({ message: actionData.success, type: 'success' });
+      if (formRef.current) {
+        formRef.current.reset(); // Reset the form fields
+      }
+      setTimeout(() => {
+        setNotification(null);
+        window.location.href = '/LoginPage?success=true'; // Redirect to login page
+      }, 3000); // 1.5-second delay before redirection
+    }
+  }, [actionData]);
+
+  // Function to render input fields based on config
   const renderInput = (config) => {
     if (config.type === 'select') {
       return (
@@ -44,11 +62,18 @@ const SignUpPage = () => {
       );
     }
   };
- 
+
   return (
-    <section className='p-5 m-auto bg-[#eee] rounded-lg'>
+    <section className='p-5 m-auto bg-[#eee] rounded-lg signup-container'>
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <h2 className="text-3xl font-bold mb-4 text-center">Register</h2>
-      <Form method='post' action="/SignUpPage" className="space-y-7">
+      <Form method='post' action="/SignUpPage" className="space-y-7" ref={formRef}>
         {renderInput(signupConfig.fullName)}
         {renderInput(signupConfig.email)}
         <div className="flex gap-2">
@@ -57,12 +82,9 @@ const SignUpPage = () => {
         </div>
         {renderInput(signupConfig.password)}
         {renderInput(signupConfig.confirmPassword)}
- 
+
         {actionData?.error && (
           <p className="mt-0 text-red-500">{actionData.error}</p>
-        )}
-        {actionData?.success && (
-          <p className="mt-0 text-green-500">{actionData.success}</p>
         )}
         <button type='submit' className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full">Sign Up</button>
       </Form>
@@ -72,12 +94,13 @@ const SignUpPage = () => {
     </section>
   );
 };
- 
+
 export default SignUpPage;
- 
+
 export const SignUpAction = async ({ request }) => {
   const data = await request.formData();
- 
+
+  // Collect form data
   const formDataObject = {
     fullName: data.get('fullName'),
     email: data.get('email'),
@@ -86,13 +109,14 @@ export const SignUpAction = async ({ request }) => {
     password: data.get('password'),
     confirmPassword: data.get('confirmPassword'),
   };
- 
+
   // Check if passwords match
   if (formDataObject.password !== formDataObject.confirmPassword) {
-    return { error: "Passwords do not match" };
+    return { error: "Password and Confirm Password do not match" };
   }
- 
+
   console.log(formDataObject);
- 
-  return redirect('/LoginPage?success=true');
+
+  // Simulate a successful response
+  return { success: "You have registered successfully. Redirecting to login page...", redirect: true };
 };

@@ -25,17 +25,21 @@ import { SignUpAction } from "./Pages/signUpPage/SignUpPage";
 
 import { LoginAction } from "./Pages/loginPage/LoginPage";
 import Home from "./Pages/home/Home";
+import Footer from "./components/footer/Footer";
 
 const Layout = ({ children }) => {
 	const location = useLocation();
 
 	const hideHeaderRoutes = ["/SignUpPage", "/LoginPage"];
+  const hideFooterRoutes = ["/SignUpPage", "/LoginPage"];
 
 	return (
 		<>
 			{!hideHeaderRoutes.includes(location.pathname) && <Header />}
 
 			{children}
+
+      {!hideFooterRoutes.includes(location.pathname) && <Footer />}
 		</>
 	);
 };

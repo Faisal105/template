@@ -1,8 +1,8 @@
-.signup-container{
+.login-container{
     max-width: 50vw;
 }
 @media screen and (max-width: 768px){
-    .signup-container{
+    .login-container{
         max-width: 90vw;
     }
 }

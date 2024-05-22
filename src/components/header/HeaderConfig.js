@@ -1,6 +1,6 @@
 export const menuItems = [
     { label: 'Home', link: '/home' },
-    { label: 'Categories', subcategories: ['Men', 'Women', 'Children'] },
     { label: 'Products', link: '/productListingPage' },
+    { label: 'Categories', subcategories: ['Men', 'Women', 'Children'] },
     { label: 'About', link: '#' }
   ];

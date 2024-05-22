@@ -66,12 +66,12 @@ const Header = () => {
         </form>
         {/* Login/Register Links and cart icon */}
         <div className="flex items-center">
-          <a href="/LoginPage" className="bg-transparent text-white text-lg mr-4">
+          <Link to="/LoginPage" className="bg-transparent text-white text-lg mr-4">
             Login /
-          </a>
-          <a href="/SignUpPage" className="bg-transparent text-white text-lg mr-4">
+          </Link>
+          <Link to="/SignUpPage" className="bg-transparent text-white text-lg mr-4">
             Register
-          </a>
+          </Link>
           {/* Cart icon */}
           <button className="bg-transparent text-white mr-4 text-lg" onClick={toggleCart}>
             <svg className="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -94,7 +94,7 @@ const Header = () => {
                     {menuItem.label}
                   </Link>
                   {/* Dropdown menu for subcategories */}
-                  <ul className="absolute hidden group-hover:block bg-gray-600 py-1 rounded-md border border-white">
+                  <ul className="absolute hidden group-hover:block bg-gray-600 py-1 rounded-md border border-white z-20">
                     {menuItem.subcategories.map((subcategory, subIndex) => (
                       <li key={subIndex}>
                         <button
@@ -107,12 +107,12 @@ const Header = () => {
                   </ul>
                 </div>
               ) : (
-                <a
-                  href={menuItem.link}
+                <Link
+                  to={menuItem.link}
                   className="text-white hover:underline text-lg cursor-pointer"
                 >
                   {menuItem.label}
-                </a>
+                </Link>
               )}
             </li>
           ))}
