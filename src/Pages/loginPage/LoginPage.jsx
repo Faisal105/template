@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Form, useActionData, redirect } from 'react-router-dom';
 import Input from '../../components/input/Input';
+import './Login.css';
 import { loginPageConfig } from './LoginPageConfig';
  
 const LoginPage = () => {
@@ -24,7 +25,7 @@ const LoginPage = () => {
   };
  
   return (
-    <section className='p-5 m-auto bg-[#eee] rounded-lg'>
+    <section className='p-5 m-auto bg-[#eee] rounded-lg login-container'>
       <h2 className="text-3xl font-bold mb-4 text-center">Login</h2>
       <Form method='post' action="/LoginPage" className="space-y-7">
         {renderInput(loginPageConfig.email)}

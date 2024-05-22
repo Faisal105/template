@@ -32,8 +32,8 @@ export const signupConfig = {
         type: "tel",
         placeholder: "Enter your phone number",
         required: true,
-        pattern: "^[6-9]\\d{9}$",
-        title: "Enter a valid 10-digit Indian phone number starting with 6, 7, 8, or 9"
+        pattern: "^\\d{4,15}$",
+        title: "Enter a valid phone number"
     },
     password: {
         name: "password",
