@@ -3,6 +3,7 @@ import {
 	createBrowserRouter,
 	RouterProvider,
 	Navigate,
+	Outlet,
 } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ProductDescriptionPage, {
@@ -27,19 +28,12 @@ import { LoginAction } from "./Pages/loginPage/LoginPage";
 import Home from "./Pages/home/Home";
 import Footer from "./components/footer/Footer";
 
-const Layout = ({ children }) => {
-	const location = useLocation();
-
-	const hideHeaderRoutes = ["/SignUpPage", "/LoginPage"];
-  const hideFooterRoutes = ["/SignUpPage", "/LoginPage"];
-
+const Layout = () => {
 	return (
 		<>
-			{!hideHeaderRoutes.includes(location.pathname) && <Header />}
-
-			{children}
-
-      {!hideFooterRoutes.includes(location.pathname) && <Footer />}
+			<Header />
+			<Outlet />
+			<Footer />
 		</>
 	);
 };
@@ -48,56 +42,47 @@ function App() {
 	const router = createBrowserRouter([
 		{
 			path: "/",
+			element: <Layout />, children: [
+				{
+					index: true,
+					element: <Navigate to="/Home" />,
+				},
+				{
+					path: "/Home",
+					element: <Home />,
+					loader: ProductListingPageLoaders,
+					errorElement: <ErrorPage />,
+				},
+				{
+					path: "/ProductListingPage",
+					element: <ProductListingPage />,
+					loader: ProductListingPageLoaders,
+					errorElement: <ErrorPage />,
+				},
+				{
+					path: "/ProductDescriptionPage/:productId",
+					element:<ProductDescriptionPage />,
+					loader: ProductDetailPageLoaders,
+					errorElement: <ErrorPage />,
+				},
+			]
+		},
+		{
+			path: "/",
 			element: <Navigate to="/Home" />,
-		},
-		{
-			path: "/Home",
-			element: (
-				<Layout>
-					<Home />
-				</Layout>
-			),
-			loader: ProductListingPageLoaders,
-			errorElement: <ErrorPage />,
-		},
-		{
-			path: "/ProductListingPage",
-			element: (
-				<Layout>
-					<ProductListingPage />
-				</Layout>
-			),
-			loader: ProductListingPageLoaders,
-			errorElement: <ErrorPage />,
-		},
-		{
-			path: "/ProductDescriptionPage/:productId",
-			element: (
-				<Layout>
-					<ProductDescriptionPage />
-				</Layout>
-			),
-			loader: ProductDetailPageLoaders,
-			errorElement: <ErrorPage />,
 		},
 		{
 			path: "/CartPage",
 			element: <CartPage />,
 		},
-
 		{
 			path: "/SignUpPage",
-
 			element: <SignUpPage />,
-
 			action: SignUpAction,
 		},
-
 		{
 			path: "/LoginPage",
-
 			element: <LoginPage />,
-
 			action: LoginAction,
 		},
 	]);

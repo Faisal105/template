@@ -1,12 +1,16 @@
 import React from "react";
 import { menuItems } from "./HeaderConfig";
 import { useCart } from "../../contexts/CartContext"; 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
  
 // Header component definition
 const Header = () => {
   const { toggleCart } = useCart();
   // Function to handle search form submission
+  const navigate = useNavigate()
+  function openCartPage() {
+    navigate('/CartPage');
+  }
   const handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.elements.search.value; // Getting the search query from the form input
@@ -73,7 +77,7 @@ const Header = () => {
             Register
           </Link>
           {/* Cart icon */}
-          <button className="bg-transparent text-white mr-4 text-lg" onClick={toggleCart}>
+          <button className="bg-transparent text-white mr-4 text-lg" onClick={openCartPage}>
             <svg className="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9 18a2 2 0 0 0 4 0h5V5a2 2 0 0 0-2-2H6.618l-.351-1.054A1 1 0 0 0 5.294 1H1v2h3.412l3.764 11.292A2 2 0 0 0 9 18zm3-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-6-6V7a1 1 0 1 1 2 0v1h9V7a1 1 0 1 1 2 0v1h2a1 1 0 0 0 0-2H4z"/>
             </svg>
