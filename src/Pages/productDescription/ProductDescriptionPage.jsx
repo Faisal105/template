@@ -5,11 +5,16 @@ import Heading from "../../components/heading/Heading";
 import Text from "../../components/text/Text";
 import Image from "../../components/image/Image";
 import Loader from "../../components/loader/Loader";
+import { useCart } from '../../contexts/CartContext';
+
 const ProductDescriptionPage = () => {
 	const product = useLoaderData();
 	const navigation = useNavigation();
+	const { addToCart } = useCart();
+
 	const handleBuyNow = (product) => {
-		console.log("Product Added to Cart:", product);
+		addToCart(product);
+		// console.log("Product Added to Cart:", product);
 	};
 
 	return (
@@ -66,8 +71,9 @@ const ProductDescriptionPage = () => {
 };
 
 export default ProductDescriptionPage;
+
 export const ProductDetailPageLoaders = async ({ request, params }) => {
-	console.log(params);
+	// console.log(params);
 	try {
 		// Fetch product data from API
 		const response = await fetch(
@@ -75,7 +81,7 @@ export const ProductDetailPageLoaders = async ({ request, params }) => {
 		);
 		const data = await response.json();
 		return data;
-		console.log("data is coming", data);
+		// console.log("data is coming", data);
 	} catch (error) {
 		// Throw error if data retrieval fails
 		throw Error("No Data Found");
