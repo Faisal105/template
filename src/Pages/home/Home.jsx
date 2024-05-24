@@ -29,7 +29,7 @@ const Home = () => {
 			<div className="w-full py-8">
 				<Carousel
 					products={products.toReversed()}
-					heading="OUR BET SELLING PRODUCTS"
+					heading="OUR BEST SELLING PRODUCTS"
 				/>
 			</div>
 			<InfoBanner />

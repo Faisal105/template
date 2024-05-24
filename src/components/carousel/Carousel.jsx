@@ -49,7 +49,7 @@ const Carousel = ({ heading, products }) => {
 									{/* Product details */}
 									<Link to={`/ProductDescriptionPage/${product.id}`}>
 										<div className="flex flex-col space-y-2">
-											<Heading customClasses="  min-h-48  ">
+											<Heading>
 												{product.title}
 											</Heading>
 											<Text>Price : ${product.price}</Text>
