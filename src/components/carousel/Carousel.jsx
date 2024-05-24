@@ -12,7 +12,9 @@ const Carousel = ({ heading, products }) => {
 
 	const handlePrevious = () => {
 		setCurrentIndex((prevIndex) =>
-			prevIndex === 0 ? Math.max(products.length - itemsToShow, 0) : prevIndex - 1
+			prevIndex === 0
+				? Math.max(products.length - itemsToShow, 0)
+				: prevIndex - 1
 		);
 	};
 
@@ -33,8 +35,7 @@ const Carousel = ({ heading, products }) => {
 							<Card
 								key={product.id}
 								customClasses="hover:shadow-lg w-96 rounded-xl space-y-4">
-								<Link
-									to={`/ProductDescriptionPage/${product.id}`}>
+								<Link to={`/ProductDescriptionPage/${product.id}`}>
 									<div className="w-full h-48 flex items-center justify-center">
 										{/* Product image */}
 										<Image
@@ -46,11 +47,11 @@ const Carousel = ({ heading, products }) => {
 								</Link>
 								<article className="flex flex-col space-y-2">
 									{/* Product details */}
-									<Link
-										to={`/ProductDescriptionPage/${product.id}`}>
+									<Link to={`/ProductDescriptionPage/${product.id}`}>
 										<div className="flex flex-col space-y-2">
-
-											<Heading>{product.title}</Heading>
+											<Heading customClasses="  min-h-48  ">
+												{product.title}
+											</Heading>
 											<Text>Price : ${product.price}</Text>
 										</div>
 									</Link>
@@ -98,10 +99,11 @@ const Carousel = ({ heading, products }) => {
 					(_, index) => (
 						<div
 							key={index}
-							className={`w-3 h-3 mx-1 rounded-full ${index === Math.floor(currentIndex / itemsToShow)
+							className={`w-3 h-3 mx-1 rounded-full ${
+								index === Math.floor(currentIndex / itemsToShow)
 									? "bg-blue-500"
 									: "bg-gray-300"
-								}`}
+							}`}
 						/>
 					)
 				)}

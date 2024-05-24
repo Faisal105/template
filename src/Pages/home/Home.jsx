@@ -17,17 +17,6 @@ const Home = () => {
 		setProducts(loaderData);
 	}, [loaderData]);
 
-	const images = [
-		"https://via.placeholder.com/800x400?text=Image+1",
-		"https://via.placeholder.com/800x400?text=Image+2",
-		"https://via.placeholder.com/800x400?text=Image+3",
-		"https://via.placeholder.com/800x400?text=Image+4",
-		"https://via.placeholder.com/800x400?text=Image+5",
-		"https://via.placeholder.com/800x400?text=Image+6",
-		"https://via.placeholder.com/800x400?text=Image+7",
-		"https://via.placeholder.com/800x400?text=Image+8",
-	];
-
 	return (
 		<div className="container mx-auto px-4 py-8 space-y-3">
 			<Banner imageUrl={topbanner} alt="Banner Image" />
@@ -38,7 +27,10 @@ const Home = () => {
 				<Carousel products={products} heading="WHAT'S NEW" />
 			</div>
 			<div className="w-full py-8">
-				<Carousel products={products.toReversed()} heading="OUR BET SELLING PRODUCTS" />
+				<Carousel
+					products={products.toReversed()}
+					heading="OUR BET SELLING PRODUCTS"
+				/>
 			</div>
 			<InfoBanner />
 		</div>
