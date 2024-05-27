@@ -42,7 +42,8 @@ function App() {
 	const router = createBrowserRouter([
 		{
 			path: "/",
-			element: <Layout />, children: [
+			element: <Layout />,
+			children: [
 				{
 					index: true,
 					element: <Navigate to="/Home" />,
@@ -61,11 +62,11 @@ function App() {
 				},
 				{
 					path: "/ProductDescriptionPage/:productId",
-					element:<ProductDescriptionPage />,
+					element: <ProductDescriptionPage />,
 					loader: ProductDetailPageLoaders,
 					errorElement: <ErrorPage />,
 				},
-			]
+			],
 		},
 		{
 			path: "/",
