@@ -53,7 +53,7 @@ const ProductListingPage = () => {
 	// Handle page change
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber);
-		handleApplyFilters(filtersState);
+		handleApplyFilters(filtersState , false);
 	};
 
 	const handleAddToCart = (product) => {
@@ -81,7 +81,8 @@ const ProductListingPage = () => {
 	}
 
 	// Apply filters
-	const handleApplyFilters = (filters) => {
+	const handleApplyFilters = (filters , resetPage = true) => {
+		resetPage && setCurrentPage(1);
 		setFiltersState(filters);
 		let filtered = [...products];
 
