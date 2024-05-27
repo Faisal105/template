@@ -65,7 +65,7 @@ const CartPage = ({ location }) => {
 							<tbody>
 								{cartItems?.map((item) => (
 									<tr key={item.id} className="border-t border-gray-300">
-										<td className="pl-4 pr-8 py-4 flex items-center justify-center space-x-4">
+										<td className="pl-4 pr-8 py-4 flex items-center justify-between space-x-4">
 											<Image
 												src={item.image}
 												alt={item.title}
