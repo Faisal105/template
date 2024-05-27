@@ -7,15 +7,8 @@ import { useLoaderData } from "react-router-dom";
 import Categories from "../../components/categories/Categories";
 
 const Home = () => {
-	const loaderData = useLoaderData();
-	const [products, setProducts] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-
-	// Fetch and set products on initial load
-	useEffect(() => {
-		setIsLoading(true);
-		setProducts(loaderData);
-	}, [loaderData]);
+	const products = useLoaderData();
+	// const [products, setProducts] = useState([]);
 
 	return (
 		<div className="container mx-auto px-4 py-8 space-y-3">

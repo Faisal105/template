@@ -72,7 +72,7 @@ const CartPage = ({ location }) => {
 												alt={item.title}
 												customClasses="max-w-full w-16 h-16 object-contain"
 											/>
-											<span>{item.title}</span>
+											<span className="ml-4">{item.title}</span>
 										</td>
 										<td className="px-5 py-3">${item.price.toFixed(2)}</td>
 										<td className="px-5 py-3">
