@@ -1,41 +1,35 @@
 import "./App.css";
 import {
-	createBrowserRouter,
-	RouterProvider,
-	Navigate,
-	Outlet,
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
 } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import ProductDescriptionPage, {
-	ProductDetailPageLoaders,
+  ProductDetailPageLoaders,
 } from "./Pages/productDescription/ProductDescriptionPage";
 import ProductListingPage, {
-	ProductListingPageLoaders,
+  ProductListingPageLoaders,
 } from "./Pages/productListing/ProductListingPage";
 import Header from "./components/header/Header";
 import ErrorPage from "./Pages/errorPage/ErrorPage";
 import CartPage from "./Pages/cartPage/CartPage";
 import Cart from "./components/cart";
 import { CartProvider } from "./contexts/CartContext";
-
-import SignUpPage from "./Pages/signUpPage/SignUpPage";
-
-import LoginPage from "./Pages/loginPage/LoginPage";
-
-import { SignUpAction } from "./Pages/signUpPage/SignUpPage";
-
-import { LoginAction } from "./Pages/loginPage/LoginPage";
+import { UserProvider } from "./contexts/UserContext";
+import SignUpPage, { SignUpAction } from "./Pages/signUpPage/SignUpPage";
+import LoginPage, { LoginAction } from "./Pages/loginPage/LoginPage";
 import Home from "./Pages/home/Home";
 import Footer from "./components/footer/Footer";
 
 const Layout = () => {
-	return (
-		<>
-			<Header />
-			<Outlet />
-			<Footer />
-		</>
-	);
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
 };
 
 function App() {
@@ -88,12 +82,14 @@ function App() {
 		},
 	]);
 
-	return (
-		<CartProvider>
-			<RouterProvider router={router} />
-			<Cart />
-		</CartProvider>
-	);
+  return (
+    <CartProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+        <Cart />
+      </UserProvider>
+    </CartProvider>
+  );
 }
 
 export default App;
