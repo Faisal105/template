@@ -1,8 +1,10 @@
-.signup-container{
-    max-width: 50vw;
+.signup-container {
+    width: 80%;
 }
-@media screen and (max-width: 768px){
-    .signup-container{
-        max-width: 90vw;
+
+@media (min-width: 768px) {
+    .signup-container {
+        width: 40%;
+        max-width: 800px;
     }
 }
