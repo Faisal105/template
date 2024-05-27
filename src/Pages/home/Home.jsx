@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Banner from "../../components/banner/Banner";
 import topbanner from "../../assests/top-banner.avif";
 import InfoBanner from "../../components/infoBanner";
