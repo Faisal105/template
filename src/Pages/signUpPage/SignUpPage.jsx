@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link, Form, useActionData } from 'react-router-dom';
 import Input from '../../components/input/Input';
-import Button from '../../components/button/Button';
 import Notification from '../../components/notification/Notification';
 import './SignUp.css';
 import { signupConfig } from './SignUpPageConfig';
@@ -64,34 +63,36 @@ const SignUpPage = () => {
   };
 
   return (
-    <section className='p-5 m-auto bg-[#eee] rounded-lg signup-container'>
-      {notification && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      <h2 className="text-3xl font-bold mb-4 text-center">Register</h2>
-      <Form method='post' action="/SignUpPage" className="space-y-7" ref={formRef}>
-        {renderInput(signupConfig.fullName)}
-        {renderInput(signupConfig.email)}
-        <div className="flex gap-2">
-          {renderInput(signupConfig.countryCode)}
-          {renderInput(signupConfig.phoneNumber)}
-        </div>
-        {renderInput(signupConfig.password)}
-        {renderInput(signupConfig.confirmPassword)}
-
-        {actionData?.error && (
-          <p className="mt-0 text-red-500">{actionData.error}</p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+      <section className="p-5 mt-5 bg-white rounded-lg shadow-lg w-full max-w-xs sm:w-1/2 sm:max-w-xl lg:max-w-2xl">
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
         )}
-        <button type='submit' className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full">Sign Up</button>
-      </Form>
-      <p className="mt-4">
-        Already have an account? <Link to="/LoginPage" className="text-blue-500">Login</Link>
-      </p>
-    </section>
+        <h2 className="text-3xl font-bold mb-4 text-center">Register</h2>
+        <Form method='post' action="/SignUpPage" className="space-y-7" ref={formRef}>
+          {renderInput(signupConfig.fullName)}
+          {renderInput(signupConfig.email)}
+          <div className="flex gap-2">
+            {renderInput(signupConfig.countryCode)}
+            {renderInput(signupConfig.phoneNumber)}
+          </div>
+          {renderInput(signupConfig.password)}
+          {renderInput(signupConfig.confirmPassword)}
+
+          {actionData?.error && (
+            <p className="mt-0 text-red-500">{actionData.error}</p>
+          )}
+          <button type='submit' className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full">Sign Up</button>
+        </Form>
+        <p className="mt-4">
+          Already have an account? <Link to="/LoginPage" className="text-blue-500">Login</Link>
+        </p>
+      </section>
+    </div>
   );
 };
 

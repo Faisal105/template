@@ -1,8 +1,10 @@
-.login-container{
-    max-width: 50vw;
+.login-container {
+    width: 90%;
 }
-@media screen and (max-width: 768px){
-    .login-container{
-        max-width: 90vw;
+
+@media (min-width: 768px) {
+    .login-container {
+        width: 40%;
+        max-width: 800px;
     }
 }
