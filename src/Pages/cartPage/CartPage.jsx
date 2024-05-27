@@ -52,7 +52,7 @@ const CartPage = ({ location }) => {
 				</Text>
 				{cartItems.length > 0 ? (
 					<>
-						<table className="mt-8 w-full lg:w-3/5 mx-auto text-center">
+						<table className="mt-8 w-full xl:w-2/3 mx-auto text-center">
 							<thead>
 								<tr>
 									<th className="pl-4 pr-8 py-4">Product</th>
@@ -65,7 +65,7 @@ const CartPage = ({ location }) => {
 							<tbody>
 								{cartItems?.map((item) => (
 									<tr key={item.id} className="border-t border-gray-300">
-										<td className="pl-4 pr-8 py-4 flex items-center justify-between space-x-4">
+										<td className="pl-4 pr-8 py-4 flex items-center gap-5 ">
 											<Image
 												src={item.image}
 												alt={item.title}
