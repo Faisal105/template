@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Form, useActionData, useNavigate } from 'react-router-dom'; 
 import Input from '../../components/input/Input'; 
 import './Login.css'; 
@@ -11,7 +11,7 @@ const LoginPage = () => {
   const { login } = useUser(); // Access the login function from user context
 
   // Effect to handle post-login navigation and context update
-  React.useEffect(() => {
+  useEffect(() => {
     if (actionData && actionData.user) {
       login(actionData.user); // Log in the user
       navigate('/ProductListingPage?success=true'); // Navigate to the product listing page
