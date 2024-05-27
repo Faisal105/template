@@ -46,7 +46,7 @@ const CartPage = ({ location }) => {
 					onClose={() => setNotification(null)}
 				/>
 			)}
-			<div className="container mx-auto px-4 py-8">
+			<div className="container mx-auto pl-4 pr-8 py-4">
 				<Text customClasses="text-4xl font-bold mb-4 text-center">
 					Your Cart
 				</Text>
@@ -55,17 +55,17 @@ const CartPage = ({ location }) => {
 						<table className="mt-8 w-full lg:w-3/5 mx-auto text-center">
 							<thead>
 								<tr>
-									<th className="px-16 py-3">Product</th>
-									<th className="px-16 py-3">Unit Price</th>
-									<th className="px-16 py-3">Qty</th>
-									<th className="px-16 py-3">Total</th>
-									<th className="px-16 py-3">Action</th>
+									<th className="pl-4 pr-8 py-4">Product</th>
+									<th className="pl-4 pr-8 py-4">Unit Price</th>
+									<th className="pl-4 pr-8 py-4">Qty</th>
+									<th className="pl-4 pr-8 py-4">Total</th>
+									<th className="pl-4 pr-8 py-4">Action</th>
 								</tr>
 							</thead>
 							<tbody>
 								{cartItems?.map((item) => (
 									<tr key={item.id} className="border-t border-gray-300">
-										<td className="px-16 py-6 flex items-center justify-center space-x-4">
+										<td className="pl-4 pr-8 py-4 flex items-center justify-center space-x-4">
 											<Image
 												src={item.image}
 												alt={item.title}
@@ -73,18 +73,18 @@ const CartPage = ({ location }) => {
 											/>
 											<span className="ml-4">{item.title}</span>
 										</td>
-										<td className="px-16 py-6">${item.price.toFixed(2)}</td>
-										<td className="px-16 py-6">
+										<td className="pl-4 pr-8 py-4">${item.price.toFixed(2)}</td>
+										<td className="pl-4 pr-8 py-4">
 											<Counter
 												quantity={item.quantity}
 												onIncrease={() => handleIncrease(item)}
 												onDecrease={() => handleDecrease(item.id)}
 											/>
 										</td>
-										<td className="px-16 py-6">
+										<td className="pl-4 pr-8 py-4">
 											${(item.price * item.quantity).toFixed(2)}
 										</td>
-										<td className="px-16 py-6 text-center">
+										<td className="pl-4 pr-8 py-4 text-center">
 											<button
 												onClick={() => deleteFromCart(item.id)}
 												className="text-red-500">
@@ -109,10 +109,12 @@ const CartPage = ({ location }) => {
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colSpan="4" className="text-right font-bold px-16 py-3">
+									<td
+										colSpan="4"
+										className="text-right font-bold pl-4 pr-8 py-4">
 										Total Price:
 									</td>
-									<td className="px-16 py-3 font-bold">
+									<td className="pl-4 pr-8 py-4 font-bold">
 										${totalPrice.toFixed(2)}
 									</td>
 								</tr>
