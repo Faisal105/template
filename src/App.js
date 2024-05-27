@@ -66,15 +66,15 @@ function App() {
 					loader: ProductDetailPageLoaders,
 					errorElement: <ErrorPage />,
 				},
+				{
+					path: "/CartPage",
+					element: <CartPage />,
+				},
 			],
 		},
 		{
 			path: "/",
 			element: <Navigate to="/Home" />,
-		},
-		{
-			path: "/CartPage",
-			element: <CartPage />,
 		},
 		{
 			path: "/SignUpPage",
