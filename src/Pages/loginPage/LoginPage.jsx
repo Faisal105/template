@@ -35,17 +35,19 @@ const LoginPage = () => {
   };
 
   return (
-    <section className='p-5 m-auto bg-[#eee] rounded-lg login-container'>
-      <h2 className="text-3xl font-bold mb-4 text-center">Login</h2>
-      <Form method='post' action="/LoginPage" className="space-y-7">
-        {renderInput(loginPageConfig.email)} 
-        {renderInput(loginPageConfig.password)}
-        <button type='submit' className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full">Login</button>
-      </Form>
-      <p className="mt-4">
-        Don't have an account? <Link to="/SignUpPage" className="text-blue-500">Sign Up</Link>
-      </p>
-    </section>
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+      <section className="p-5 m-auto bg-white rounded-lg shadow-lg login-container">
+        <h2 className="text-3xl font-bold mb-4 text-center">Login</h2>
+        <Form method='post' action="/LoginPage" className="space-y-7">
+          {renderInput(loginPageConfig.email)} 
+          {renderInput(loginPageConfig.password)}
+          <button type='submit' className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full">Login</button>
+        </Form>
+        <p className="mt-4">
+          Don't have an account? <Link to="/SignUpPage" className="text-blue-500">Sign Up</Link>
+        </p>
+      </section>
+    </div>
   );
 };
 
@@ -63,5 +65,3 @@ export const LoginAction = async ({ request }) => {
   // Simulate login process
   return { user: { email: formDataObject.email } }; 
 };
-
-
