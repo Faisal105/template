@@ -1,15 +1,15 @@
 import "./App.css";
 import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-  Outlet,
+	createBrowserRouter,
+	RouterProvider,
+	Navigate,
+	Outlet,
 } from "react-router-dom";
 import ProductDescriptionPage, {
-  ProductDetailPageLoaders,
+	ProductDetailPageLoaders,
 } from "./Pages/productDescription/ProductDescriptionPage";
 import ProductListingPage, {
-  ProductListingPageLoaders,
+	ProductListingPageLoaders,
 } from "./Pages/productListing/ProductListingPage";
 import Header from "./components/header/Header";
 import ErrorPage from "./Pages/errorPage/ErrorPage";
@@ -23,13 +23,13 @@ import Home from "./Pages/home/Home";
 import Footer from "./components/footer/Footer";
 
 const Layout = () => {
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<Outlet />
+			<Footer />
+		</>
+	);
 };
 
 function App() {
@@ -60,16 +60,17 @@ function App() {
 					loader: ProductDetailPageLoaders,
 					errorElement: <ErrorPage />,
 				},
+				{
+					path: "/CartPage",
+					element: <CartPage />,
+				},
 			],
 		},
 		{
 			path: "/",
 			element: <Navigate to="/Home" />,
 		},
-		{
-			path: "/CartPage",
-			element: <CartPage />,
-		},
+
 		{
 			path: "/SignUpPage",
 			element: <SignUpPage />,
@@ -82,14 +83,14 @@ function App() {
 		},
 	]);
 
-  return (
-    <CartProvider>
-      <UserProvider>
-        <RouterProvider router={router} />
-        <Cart />
-      </UserProvider>
-    </CartProvider>
-  );
+	return (
+		<CartProvider>
+			<UserProvider>
+				<RouterProvider router={router} />
+				<Cart />
+			</UserProvider>
+		</CartProvider>
+	);
 }
 
 export default App;
