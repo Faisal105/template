@@ -56,7 +56,8 @@ const ProductListingPage = () => {
 		handleApplyFilters(filtersState , false);
 	};
 
-	const handleAddToCart = (product) => {
+	const handleAddToCart = (product,e) => {
+		e.preventDefault();
 		addToCart(product);
 		setNotification({ message: 'Product added to cart', type: 'success' });
 		setTimeout(() => {
@@ -183,7 +184,7 @@ const ProductListingPage = () => {
 											<Button
 												label="Add To Cart"
 												buttonType="primary"
-												onClick={() => handleAddToCart(product)}
+												onClick={(e) => handleAddToCart(product,e)}
 											/>
 										)}
 									</article>

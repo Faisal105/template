@@ -23,7 +23,8 @@ const ProductDescriptionPage = () => {
 		setShowViewCart(cartItem ? cartItem.quantity > 0 : false);
 	}, [cartItems, product.id]);
 
-	const handleBuyNow = (product) => {
+	const handleBuyNow = (product, e) => {
+		e.preventDefault();
 		addToCart(product);
 		setNotification({ message: "Product added to cart", type: "success" });
 		setTimeout(() => {
@@ -119,7 +120,7 @@ const ProductDescriptionPage = () => {
 								<Button
 									label="Add To Cart"
 									buttonType="primary"
-									onClick={() => handleBuyNow(product)}
+									onClick={(e) => handleBuyNow(product, e)}
 								/>
 							)}
 						</div>
