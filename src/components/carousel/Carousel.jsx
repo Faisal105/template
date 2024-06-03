@@ -6,21 +6,22 @@ import Text from "../text/Text";
 import Image from "../image/Image";
 import Button from "../button/Button";
 
-const Carousel = ({ heading, products }) => {
+const Carousel = ({ heading, products:{products} }) => {
+	console.log("🚀 ~ Carousel ~ products:", products)
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const itemsToShow = 4;
 
 	const handlePrevious = () => {
 		setCurrentIndex((prevIndex) =>
 			prevIndex === 0
-				? Math.max(products.length - itemsToShow, 0)
+				? Math.max(products && products.length - itemsToShow, 0)
 				: prevIndex - 1
 		);
 	};
 
 	const handleNext = () => {
 		setCurrentIndex((prevIndex) =>
-			prevIndex >= products.length - itemsToShow ? 0 : prevIndex + 1
+			prevIndex >= products && products.length - itemsToShow ? 0 : prevIndex + 1
 		);
 	};
 
@@ -29,28 +30,29 @@ const Carousel = ({ heading, products }) => {
 			<h2 className="text-2xl font-bold mb-4 text-center">{heading}</h2>
 			<div className="relative w-full">
 				<div className="flex justify-around gap-10 overflow-hidden">
-					{products
+					{products && products
 						.slice(currentIndex, currentIndex + itemsToShow)
 						.map((product, index) => (
 							<Card
-								key={product.id}
+								key={product.code}
 								customClasses="hover:shadow-lg w-96 rounded-xl space-y-4">
-								<Link to={`/ProductDescriptionPage/${product.id}`}>
+								<Link to={`/Open-Catalogue/Components/Power-Supplies/Power-Adapters-%26-Inverters/AC-Adapter-AC-L200/p/${product.code}`}>
 									<div className="w-full h-48 flex items-center justify-center">
 										{/* Product image */}
 										<Image
-											src={product.image}
-											alt={product.title}
+											src={product.firstVariantImage}
+											alt={product.name}
 											customClasses="max-w-full max-h-full object-contain"
 										/>
 									</div>
 								</Link>
 								<article className="flex flex-col space-y-2">
 									{/* Product details */}
-									<Link to={`/ProductDescriptionPage/${product.id}`}>
+									<Link to={`/ProductDescriptionPage/${product.code}`}>
 										<div className="flex flex-col space-y-2">
-											<Heading customClasses="    ">{product.title}</Heading>
-											<Text>Price : ${product.price}</Text>
+											<Heading customClasses="    ">{product.name}</Heading>
+											{products.map(p => {<Text>Price : ${product.formattedValue}</Text>})}
+											{/* <Text>Price : ${product.price}</Text> */}
 										</div>
 									</Link>
 								</article>
@@ -93,7 +95,7 @@ const Carousel = ({ heading, products }) => {
 				</button>
 			</div>
 			<div className="flex mt-4">
-				{Array.from({ length: Math.ceil(products.length / itemsToShow) }).map(
+				{Array.from({ length: Math.ceil(products?.length / itemsToShow) }).map(
 					(_, index) => (
 						<div
 							key={index}

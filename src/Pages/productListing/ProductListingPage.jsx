@@ -217,9 +217,9 @@ export default ProductListingPage;
 export const ProductListingPageLoaders = async () => {
 	try {
 		// Fetch product data from API
-		const response = await fetch("https://fakestoreapi.com/products/");
+		const response = await fetch(`${process.env.REACT_APP_BASE_URL}/products/search?currentPage=0&fields=DEFAULT&pageSize=20`);
 		const data = await response.json();
-		console.log("data is coming", data);
+		console.log("🚀 ~ ProductListingPageLoaders ~ dataProducts:", data.products)
 		return data;
 	} catch (error) {
 		// Throw error if data retrieval fails 
