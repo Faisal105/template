@@ -26,31 +26,48 @@ const Filters = ({ onApplyFilters, filterConfig }) => {
 	};
 
 	return (
-		<section className='p-5 bg-[#eee] rounded-lg'>
-			<form onSubmit={handleSubmit} className="space-y-7">
-				{Object.entries(filterConfig).map(([key, { label, type, options }]) => (
-					<article key={key} className='flex flex-col space-y-3'>
-						<h3 className="font-bold">{label}</h3>
-						{options.map(option => (
-							<label key={option.value} className="inline-flex items-center space-x-2">
-								<input
-									type={type === 'checkbox' ? 'checkbox' : 'radio'}
-									name={key}
-									value={option.value}
-									checked={type === 'checkbox' ? filterValues[key]?.[option.value] : filterValues[key] === option.value}
-									onChange={() => handleInputChange(key, option.value, type)}
-									className="focus:ring-0 hover:cursor-pointer"
-								/>
-								<span>{option.label}</span>
-							</label>
-						))}
-					</article>
-				))}
-					<button className='underline text-blue-500 text-base' onClick={handleClearFilters}>Clear Filters</button>
-					{/* <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Filters</button> */}
-			</form>
-		</section>
-	);
+    <section className="p-5 bg-[#eee] rounded-lg">
+      <form onSubmit={handleSubmit} className="space-y-7">
+        {Object.entries(filterConfig).map(
+          ([key, { label, type, options }], index) => (
+            <article
+              key={`${label}${index}`}
+              className="flex flex-col space-y-3"
+            >
+              <h3 className="font-bold">{label}</h3>
+              {options.map((option) => (
+                <label
+                  key={option.value}
+                  className="inline-flex items-center space-x-2"
+                >
+                  <input
+                    type={type === "checkbox" ? "checkbox" : "radio"}
+                    name={key}
+                    value={option.value}
+                    checked={
+                      type === "checkbox"
+                        ? filterValues[key]?.[option.value]
+                        : filterValues[key] === option.value
+                    }
+                    onChange={() => handleInputChange(key, option.value, type)}
+                    className="focus:ring-0 hover:cursor-pointer"
+                  />
+                  <span>{option.label}</span>
+                </label>
+              ))}
+            </article>
+          )
+        )}
+        <button
+          className="underline text-blue-500 text-base"
+          onClick={handleClearFilters}
+        >
+          Clear Filters
+        </button>
+        {/* <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Apply Filters</button> */}
+      </form>
+    </section>
+  );
 };
 
 export default Filters;
