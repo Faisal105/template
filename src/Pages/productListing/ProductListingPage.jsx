@@ -8,21 +8,15 @@ import Pagination from "../../components/pagination/Pagination";
 import Button from "../../components/button/Button";
 import Loader from "../../components/loader/Loader";
 import { useCart } from "../../contexts/CartContext";
-import { filterConfig } from "../../components/filter/FilterOptions";
-import Filters from "../../components/filter/Filter";
 import Counter from "../../components/counter/Counter";
 import Notification from "../../components/notification/Notification";
 
 const ProductListingPage = () => {
   // State variables
   const loaderData = useLoaderData();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(loaderData?.products);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState(
-    loaderData?.products
-  );
-  const [filtersState, setFiltersState] = useState({});
   const [notification, setNotification] = useState(null);
   const { cartItems, addToCart, removeFromCart } = useCart();
 
@@ -30,15 +24,7 @@ const ProductListingPage = () => {
   useEffect(() => {
     setIsLoading(true);
     setProducts(loaderData?.products);
-    setFilteredProducts(loaderData?.products);
     console.log("🚀 loaderdata?.products", loaderData?.products);
-    // Getting Categories From Api
-    filterConfig.category.options = Array.from(
-      new Set(loaderData?.products?.map((p) => p.category))
-    ).map((category) => ({
-      label: category,
-      value: category,
-    }));
     setIsLoading(false);
   }, [loaderData?.products]);
 
@@ -47,24 +33,12 @@ const ProductListingPage = () => {
     return title?.length > 17 ? title.substring(0, 17) + "..." : title;
   };
 
-  // Pagination
-  // const itemsPerPage = 8;
-  // const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
   // Handle page change
   const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
 
-	console.log('Page Number', pageNumber)
 	
-     const url = `${process.env.REACT_APP_BASE_URL}/products/search?currentPage=${pageNumber -1}&pageSize=${itemsPerPage}&sort=relevance`;
-
-     console.log(
-       "Requesting page:",
-       pageNumber,
-       "with adjusted index:",
-       pageNumber
-     );
+     const url = `${process.env.REACT_APP_BASE_URL}/products/search?currentPage=${pageNumber - 1}&pageSize=${loaderData?.pagination?.pageSize}&sort=relevance`;
      console.log("Request URL:", url);
 
      setIsLoading(true);
@@ -72,21 +46,14 @@ const ProductListingPage = () => {
      try {
        const response = await fetch(url);
        const data = await response.json();
-       console.log("Received data:", data);
 
        if (data.products) {
          setProducts(data.products);
-         setFilteredProducts(data.products);
-       }
-       if (data.pagination) {
-         setTotalPages(data.pagination.totalPages);
        }
      } catch (error) {
        console.error("Failed to fetch products:", error);
      }
     setIsLoading(false);
-    console.log(loaderData?.pagination);
-    handleApplyFilters(filtersState, false);
   };
 
   const handleAddToCart = (product, e) => {
@@ -114,44 +81,7 @@ const ProductListingPage = () => {
     }, 800);
   };
 
-  // Apply filters
-  const handleApplyFilters = (filters, resetPage = true) => {
-    resetPage && setCurrentPage(1);
-    setFiltersState(filters);
-    let filtered = [...products];
 
-    // Filter by category
-    if (
-      filters.category &&
-      Object.values(filters.category).some((val) => val)
-    ) {
-      filtered = filtered.filter((product) =>
-        Object.entries(filters.category).some(
-          ([key, value]) => value && product.category === key
-        )
-      );
-    }
-
-    // Sort by price
-    if (filters.price) {
-      filtered.sort((a, b) => {
-        return filters.price === "lowToHigh"
-          ? a.price - b.price
-          : b.price - a.price;
-      });
-    }
-
-    // Sort by rating
-    if (filters.rating) {
-      filtered.sort((a, b) => {
-        return filters.rating === "lowToHigh"
-          ? a.rating.rate - b.rating.rate
-          : b.rating.rate - a.rating.rate;
-      });
-    }
-
-    setFilteredProducts(filtered);
-  };
 
   return (
     <>
@@ -162,24 +92,14 @@ const ProductListingPage = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      {/* Filter section */}
-      <div className="flex flex-row">
-        <div className="w-1/6 p-4">
-          {/* Filters component for filtering products */}
-          <Filters
-            onApplyFilters={handleApplyFilters}
-            filterConfig={filterConfig}
-          />
-        </div>
 
         {/* Product listing section */}
-        <div className="w-10/12 p-4">
+        <div className="w-full p-4">
           {isLoading ? (
             <Loader />
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
-              {console.log("😍", filteredProducts)}
-              {filteredProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <Card
                   key={`${product?.code}-${index}`}
                   customClasses="hover:shadow-lg rounded-xl space-y-4"
@@ -224,10 +144,8 @@ const ProductListingPage = () => {
             </div>
           )}
         </div>
-      </div>
-
       {/* Pagination section */}
-      {totalPages > 1 && (
+      {loaderData?.pagination?.totalPages > 1 && (
         <div className="flex justify-center my-4">
           <Pagination
             currentPage={currentPage}
@@ -239,8 +157,6 @@ const ProductListingPage = () => {
     </>
   );
 };
-const url =
-  "https://spartacus-demo.eastus.cloudapp.azure.com:8443/occ/v2/apparel-uk-spa/products/search?fields=products(code%2Cname%2Csummary%2Cconfigurable%2CconfiguratorType%2Cmultidimensional%2Cprice(FULL)%2Cimages(DEFAULT)%2Cstock(FULL)%2CaverageRating%2CvariantOptions)%2Cfacets%2Cbreadcrumbs%2Cpagination(DEFAULT)%2Csorts(DEFAULT)%2CfreeTextSearch%2CcurrentQuery&query=%3Arelevance%3AallCategories%3ANixon%3Aprice%3A%C2%A350-%C2%A399.99&pageSize=12&lang=en&curr=GBP";
 export default ProductListingPage;
 
 export const ProductListingPageLoaders = async () => {
@@ -257,21 +173,3 @@ export const ProductListingPageLoaders = async () => {
     throw Error("No Data Found");
   }
 };
-
-export const tempAPI = async () => {
-  try {
-    // Fetch product data from API
-    const response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/products/search?fields=products(code%2Cname%2Csummary%2Cconfigurable%2CconfiguratorType%2Cmultidimensional%2Cprice(FULL)%2Cimages(DEFAULT)%2Cstock(FULL)%2CaverageRating%2CvariantOptions)%2Cfacets%2Cbreadcrumbs%2Cpagination(DEFAULT)%2Csorts(DEFAULT)%2CfreeTextSearch%2CcurrentQuery&query=%3Arelevance%3AallCategories%3ANixon%3Aprice%3A%C2%A350-%C2%A399.99&pageSize=12&lang=en&curr=GBP`
-    );
-    const data = await response.json();
-    console.log("🚀 ~ TEMP API:", data);
-    return data;
-  } catch (error) {
-    // Throw error if data retrieval fails
-    throw Error("No Data Found");
-  }
-};
-
-
-tempAPI();
