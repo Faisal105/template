@@ -40,12 +40,16 @@ const ProductListingPage = () => {
       .join("&");
 
     setIsLoading(true);
+    const insertString = "%3AallCategories%3ANixon"
+    const splittedString = queryParams.split("%3Arelevance");
+    const newQueryParams = `${splittedString[0]}%3Arelevance${insertString}${splittedString[1]}`;
     console.log(queryParams, "queryParams");
+    console.log("🚀 ~ handleFiltersChange ~ newQueryParams:", newQueryParams)
     const response = await fetch(
-      `https://spartacus-demo.eastus.cloudapp.azure.com:8443/occ/v2/apparel-uk-spa/products/search?fields=products(code%2Cname%2Csummary%2Cconfigurable%2CconfiguratorType%2Cmultidimensional%2Cprice(FULL)%2Cimages(DEFAULT)%2Cstock(FULL)%2CaverageRating%2CvariantOptions)%2Cfacets%2Cbreadcrumbs%2Cpagination(DEFAULT)%2Csorts(DEFAULT)%2CfreeTextSearch%2CcurrentQuery&query=${queryParams}&pageSize=12&lang=en&curr=GBP`
+      `https://spartacus-demo.eastus.cloudapp.azure.com:8443/occ/v2/apparel-uk-spa/products/search?fields=products(code%2Cname%2Csummary%2Cconfigurable%2CconfiguratorType%2Cmultidimensional%2Cprice(FULL)%2Cimages(DEFAULT)%2Cstock(FULL)%2CaverageRating%2CvariantOptions)%2Cfacets%2Cbreadcrumbs%2Cpagination(DEFAULT)%2Csorts(DEFAULT)%2CfreeTextSearch%2CcurrentQuery&query=${newQueryParams}&pageSize=12&lang=en&curr=GBP`
     );
-    console.log(response.url, "response");
     const data = await response.json();
+    console.log("🚀 ~ handleFiltersChange ~ data:", data)
     setProducts(data.products);
     setIsLoading(false);
   };
@@ -118,7 +122,7 @@ const ProductListingPage = () => {
             </div>
             <div className="w-[82%]">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
-                {products?.map((product, index) => (
+                {products.length > 0 ? products?.map((product, index) => (
                   <Card
                     key={`${product?.code}-${index}`}
                     customClasses="hover:shadow-lg rounded-xl space-y-4"
@@ -159,7 +163,11 @@ const ProductListingPage = () => {
                       )}
                     </article>
                   </Card>
-                ))}
+                ) ): (
+                  <>
+                    <h1 className="text-3xl text-gray-700">No product found! Please try another filter...</h1>
+                  </>
+                )}
               </div>
             </div>
           </div>
