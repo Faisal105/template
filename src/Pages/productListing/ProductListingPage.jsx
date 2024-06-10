@@ -10,6 +10,7 @@ import Loader from "../../components/loader/Loader";
 import { useCart } from "../../contexts/CartContext";
 import Counter from "../../components/counter/Counter";
 import Notification from "../../components/notification/Notification";
+import Filters from "../../components/filters/Filters";
 
 const ProductListingPage = () => {
   // State variables
@@ -20,7 +21,6 @@ const ProductListingPage = () => {
   const [notification, setNotification] = useState(null);
   const { cartItems, addToCart, removeFromCart } = useCart();
 
-  // Fetch and set products on initial load
   useEffect(() => {
     setIsLoading(true);
     setProducts(loaderData?.products);
@@ -28,31 +28,47 @@ const ProductListingPage = () => {
     setIsLoading(false);
   }, [loaderData?.products]);
 
-  // Truncate title if too long
   const trimTitle = (title) => {
     return title?.length > 17 ? title.substring(0, 17) + "..." : title;
+  };
+
+  const handleFiltersChange = async (selectedFilters) => {
+    const queryParams = Object.entries(selectedFilters)
+      .map(([key, values]) =>
+        values.map((value) => `${encodeURIComponent(value)}`).join("&")
+      )
+      .join("&");
+
+    setIsLoading(true);
+    console.log(queryParams, "queryParams");
+    const response = await fetch(
+      `https://spartacus-demo.eastus.cloudapp.azure.com:8443/occ/v2/apparel-uk-spa/products/search?fields=products(code%2Cname%2Csummary%2Cconfigurable%2CconfiguratorType%2Cmultidimensional%2Cprice(FULL)%2Cimages(DEFAULT)%2Cstock(FULL)%2CaverageRating%2CvariantOptions)%2Cfacets%2Cbreadcrumbs%2Cpagination(DEFAULT)%2Csorts(DEFAULT)%2CfreeTextSearch%2CcurrentQuery&query=${queryParams}&pageSize=12&lang=en&curr=GBP`
+    );
+    console.log(response.url, "response");
+    const data = await response.json();
+    setProducts(data.products);
+    setIsLoading(false);
   };
 
   // Handle page change
   const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
 
-	
-     const url = `${process.env.REACT_APP_BASE_URL}/products/search?currentPage=${pageNumber - 1}&pageSize=${loaderData?.pagination?.pageSize}&sort=relevance`;
-     console.log("Request URL:", url);
+    const url = `${process.env.REACT_APP_BASE_URL}/products/search?currentPage=${pageNumber - 1}&pageSize=${loaderData?.pagination?.pageSize}&sort=relevance`;
+    console.log("Request URL:", url);
 
-     setIsLoading(true);
+    setIsLoading(true);
 
-     try {
-       const response = await fetch(url);
-       const data = await response.json();
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-       if (data.products) {
-         setProducts(data.products);
-       }
-     } catch (error) {
-       console.error("Failed to fetch products:", error);
-     }
+      if (data.products) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
     setIsLoading(false);
   };
 
@@ -81,8 +97,6 @@ const ProductListingPage = () => {
     }, 800);
   };
 
-
-
   return (
     <>
       {notification && (
@@ -93,57 +107,64 @@ const ProductListingPage = () => {
         />
       )}
 
-        {/* Product listing section */}
-        <div className="w-full p-4">
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
-              {products.map((product, index) => (
-                <Card
-                  key={`${product?.code}-${index}`}
-                  customClasses="hover:shadow-lg rounded-xl space-y-4"
-                >
-                  <Link to={`/ProductDescriptionPage/${product.code}`}>
-                    <div className="w-full h-48 flex items-center justify-center">
-                      <Image
-                        src={`https://spartacus-demo.eastus.cloudapp.azure.com:8443/${product?.firstVariantImage}`}
-                        alt={product.name}
-                        customClasses="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  </Link>
-                  <article className="flex flex-col space-y-2">
+      {/* Product listing section */}
+      <div className="w-full p-4">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="flex justify-center gap-5">
+            <div className="w-[18%]">
+              <Filters onFiltersChange={handleFiltersChange} />
+            </div>
+            <div className="w-[82%]">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
+                {products?.map((product, index) => (
+                  <Card
+                    key={`${product?.code}-${index}`}
+                    customClasses="hover:shadow-lg rounded-xl space-y-4"
+                  >
                     <Link to={`/ProductDescriptionPage/${product.code}`}>
-                      <div className="flex flex-col space-y-2">
-                        <Heading>{trimTitle(product.name)}</Heading>
-                        <Text>Price : {product?.price?.formattedValue}</Text>
-                        {/* <Text>Category : {product.category}</Text> */}
-                        {/* <Text>Rating : {product.rating.rate}</Text> */}
+                      <div className="w-full h-48 flex items-center justify-center">
+                        <Image
+                          src={`https://spartacus-demo.eastus.cloudapp.azure.com:8443/${product?.firstVariantImage}`}
+                          alt={product.name}
+                          customClasses="max-w-full max-h-full object-contain"
+                        />
                       </div>
                     </Link>
-                    {cartItems.some((item) => item.code === product.code) ? (
-                      <Counter
-                        quantity={
-                          cartItems.find((item) => item.code === product.code)
-                            .quantity
-                        }
-                        onIncrease={() => handleIncrease(product)}
-                        onDecrease={() => handleDecrease(product?.code)}
-                      />
-                    ) : (
-                      <Button
-                        label="Add To Cart"
-                        buttonType="primary"
-                        onClick={(e) => handleAddToCart(product, e)}
-                      />
-                    )}
-                  </article>
-                </Card>
-              ))}
+                    <article className="flex flex-col space-y-2">
+                      <Link to={`/ProductDescriptionPage/${product.code}`}>
+                        <div className="flex flex-col space-y-2">
+                          <Heading>{trimTitle(product.name)}</Heading>
+                          <Text>Price : {product?.price?.formattedValue}</Text>
+                          {/* <Text>Category : {product.category}</Text> */}
+                          {/* <Text>Rating : {product.rating.rate}</Text> */}
+                        </div>
+                      </Link>
+                      {cartItems.some((item) => item.code === product.code) ? (
+                        <Counter
+                          quantity={
+                            cartItems.find((item) => item.code === product.code)
+                              .quantity
+                          }
+                          onIncrease={() => handleIncrease(product)}
+                          onDecrease={() => handleDecrease(product?.code)}
+                        />
+                      ) : (
+                        <Button
+                          label="Add To Cart"
+                          buttonType="primary"
+                          onClick={(e) => handleAddToCart(product, e)}
+                        />
+                      )}
+                    </article>
+                  </Card>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
       {/* Pagination section */}
       {loaderData?.pagination?.totalPages > 1 && (
         <div className="flex justify-center my-4">
@@ -166,10 +187,9 @@ export const ProductListingPageLoaders = async () => {
       `${process.env.REACT_APP_BASE_URL}/products/search?currentPage=0&fields=DEFAULT&pageSize=20`
     );
     const data = await response.json();
-    console.log("🚀 ~ ProductListingPageLoaders ~ dataProducts:", data);
+    console.log("🚀 ~ ProductListingPageLoaders ", data);
     return data;
   } catch (error) {
-    // Throw error if data retrieval fails
     throw Error("No Data Found");
   }
 };
