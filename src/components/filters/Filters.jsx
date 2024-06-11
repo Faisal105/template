@@ -103,16 +103,16 @@ const Filters = ({ onFiltersChange }) => {
           <hr className="my-5" />
           <div className="flex flex-col gap-3 ">
             <button
-              onClick={clearFilters}
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 text-xs rounded-lg"
-            >
-              Clear Filters
-            </button>
-            <button
               onClick={applyFilters}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 text-xs rounded-lg"
             >
               Apply Filters
+            </button>
+            <button
+              onClick={clearFilters}
+              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 text-xs rounded-lg"
+            >
+              Clear Filters
             </button>
           </div>
         </>
