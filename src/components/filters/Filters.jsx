@@ -42,6 +42,11 @@ const Filters = ({ onFiltersChange }) => {
     onFiltersChange(selectedFilters);
   };
 
+  const clearFilters = () => {
+    setSelectedFilters({});
+    onFiltersChange({});
+  };
+
   const toggleFacet = (facetName) => {
     setExpandedFacet(expandedFacet === facetName ? null : facetName);
   };
@@ -51,7 +56,7 @@ const Filters = ({ onFiltersChange }) => {
       {filters.map((facet) => (
         <div key={facet.name} className="my-6">
           <h3
-            className="mb-2 text-base cursor-pointer"
+            className="mb-2 text-sm cursor-pointer"
             onClick={() => toggleFacet(facet.name)}
           >
             {facet.name}
@@ -83,9 +88,15 @@ const Filters = ({ onFiltersChange }) => {
       ))}
       <button
         onClick={applyFilters}
-        className="underline bg-gray-200 px-2 py-1 text-base rounded-lg"
+        className="bg-blue-200 px-2 py-1 text-sm rounded-lg"
       >
         Apply Filters
+      </button>
+      <button
+        onClick={clearFilters}
+        className="underline px-3 py-2 text-sm rounded-lg mt-4"
+      >
+        Clear Filters
       </button>
     </div>
   );

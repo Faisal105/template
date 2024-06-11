@@ -36,6 +36,11 @@ const ProductListingPage = () => {
   };
 
   const handleFiltersChange = async (selectedFilters) => {
+    if (Object.keys(selectedFilters).length === 0) {
+       setQueryParams(null);
+       setProducts(loaderData?.products);
+       return;
+    }
     setQueryParams(null);
     const queryParams = Object.entries(selectedFilters)
       .map(([key, values]) => values.map((value) => `${encodeURIComponent(value)}`).join('&'))
