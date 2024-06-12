@@ -1,12 +1,13 @@
 import React from "react";
 import { menuItems } from "./HeaderConfig";
 import { useCart } from "../../contexts/CartContext";
-import { useUser } from "../../contexts/UserContext"; // Import user context
+import { useUser } from "../../contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
+import Heading from "../heading/Heading";
 
 const Header = () => {
   const { toggleCart } = useCart();
-  const { user, logout } = useUser(); // Get user and logout from user context
+  const { user, logout } = useUser();
   const navigate = useNavigate();
 
   function openCartPage() {
@@ -20,14 +21,15 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logout(); // Perform logout
+    logout();
+    localStorage.removeItem('authToken');
     navigate('/Home');
   };
 
   return (
-    <header className="bg-gray-700">
-      <div className="flex items-center justify-between bg-gray-600 py-4 px-6">
-        <div className="flex items-center">
+    <header className="bg-gray-700 text-white">
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between py-4 px-6">
+        <div className="flex items-center mb-4 sm:mb-0">
           <svg className="h-8 w-8 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
             <path
               className="text-white"
@@ -38,7 +40,7 @@ const Header = () => {
           </svg>
           <Link to={'/Home'} className="text-white text-lg font-semibold">Fashion Shop</Link>
         </div>
-        <form className="flex items-center mx-4" onSubmit={handleSearch}>
+        <form className="flex items-center mx-4 mb-4 sm:mb-0" onSubmit={handleSearch}>
           <input
             type="text"
             name="search"
@@ -47,7 +49,7 @@ const Header = () => {
           />
           <button
             type="submit"
-            className="bg-gray-700 text-white rounded-r-md px-4 py-2 border border-gray-500 border-l-0 hover:bg-gray-800 focus:outline-none flex items-center justify-center"
+            className="bg-gray-500 text-white rounded-r-md px-4 py-2 border border-gray-500 border-l-0 hover:bg-gray-800 focus:outline-none flex items-center justify-center"
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -59,27 +61,37 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <div className="flex items-center">
+        <div className="flex items-center relative mb-4 sm:mb-0">
           {user ? (
-            <>
-              <span className="text-white text-lg mr-4">{user.email}</span>
-              <button className="bg-transparent text-white text-lg mr-4" onClick={handleLogout}>Logout</button>
-            </>
+            <div className="relative group mx-5">
+              <span className="text-white text-lg mr-2">Hi, {user.firstName}</span>
+              <div className="flex items-center cursor-pointer group-hover:block">
+                <Link to="/Home" className="flex items-center">
+                  <Heading customClasses="text-white">My Account</Heading>
+                  <svg className="ml-1 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </Link>           
+                <div className="absolute py-1 w-48 bg-white shadow-xl z-20 hidden group-hover:block">
+                  <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</button>
+                </div>
+              </div>
+            </div>
           ) : (
             <>
               <Link to="/LoginPage" className="bg-transparent text-white text-lg mr-4">Login</Link>
               <Link to="/SignUpPage" className="bg-transparent text-white text-lg mr-4">Register</Link>
             </>
           )}
-          <button className="bg-transparent text-white mr-4 text-lg" onClick={openCartPage}>
+          <button className="bg-transparent text-white text-lg" onClick={openCartPage}>
             <svg className="h-6 w-6 fill-current text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M9 18a2 2 0 0 0 4 0h5V5a2 2 0 0 0-2-2H6.618l-.351-1.054A1 1 0 0 0 5.294 1H1v2h3.412l3.764 11.292A2 2 0 0 0 9 18zm3-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-6-6V7a1 1 0 1 1 2 0v1h9V7a1 1 0 1 1 2 0v1h2a1 1 0 0 0 0-2H4z"/>
             </svg>
           </button>
         </div>
       </div>
-      <nav className="flex items-center justify-center py-4 px-6">
-        <ul className="flex">
+      <nav className="flex items-center bg-gray-500 justify-center py-4 px-6">
+        <ul className="flex flex-wrap justify-center">
           {menuItems.map((menuItem, index) => (
             <li key={index} className="mx-4 relative">
               {menuItem.subcategories ? (
