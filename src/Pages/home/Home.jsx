@@ -7,6 +7,9 @@ import Categories from "../../components/categories/Categories";
 
 const Home = () => {
 	const products = useLoaderData();
+	// const bestSellingProducts = 
+	// console.log("🚀 ~ Home ~ bestSellingProducts:", bestSellingProducts)
+	console.log("🚀 ~ Home ~ products:", products.products)
 	// const [products, setProducts] = useState([]);
 
 	return (
@@ -20,7 +23,7 @@ const Home = () => {
 			</div>
 			<div className="w-full py-8">
 				<Carousel
-					products={products.toReversed()}
+					products={products}
 					heading="OUR BEST SELLING PRODUCTS"
 				/>
 			</div>

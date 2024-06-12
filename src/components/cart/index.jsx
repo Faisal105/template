@@ -32,7 +32,7 @@ const Cart = () => {
 					<table className="mt-2">
 						<tbody className="space-y-6">
 							{cartItems.map((item, index) => (
-								<tr key={item.id}>
+								<tr key={item.code}>
 									<td className="py-3 pr-3">
 										<div className="w-16 h-16">
 											<Image
@@ -61,8 +61,8 @@ const Cart = () => {
 												stroke="currentColor"
 												stroke-width="2">
 												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
+													strokeLinecap="round"
+													strokeLinejoin="round"
 													d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M5 7h14M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m0 0H9m0 0H5"
 												/>
 											</svg>

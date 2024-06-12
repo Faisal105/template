@@ -37,29 +37,35 @@ const Pagination = ({
         };
 
         const items = getPaginationRange().map((page, index) => {
-            if (page === '...') {
-                return <li key={index} className="px-4 h-10 leading-tight text-gray-500">...</li>;
-            }
-            const isActive = currentPage === page;
-            const linkClasses = `${pageLinkClasses} ${isActive ? activeLinkClasses : normalLinkClasses}`;
-
+          const key =
+            typeof page === "number" ? `page-${page}` : `ellipsis-${index}`;
+          if (page === "...") {
             return (
-                <li key={page}>
-                    <a
-                        href="#"
-                        className={linkClasses}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (!isActive) {
-                                onPageChange(page);
-                            }
-                        }}
-                        aria-current={isActive ? "page" : undefined}
-                    >
-                        {page}
-                    </a>
-                </li>
+              <li key={key} className="px-4 h-10 leading-tight text-gray-500">
+                ...
+              </li>
             );
+          }
+          const isActive = currentPage === page;
+          const linkClasses = `${pageLinkClasses} ${isActive ? activeLinkClasses : normalLinkClasses}`;
+
+          return (
+            <li key={key}>
+              <a
+                href="#"
+                className={linkClasses}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!isActive) {
+                    onPageChange(page);
+                  }
+                }}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {page}
+              </a>
+            </li>
+          );
         });
 
         setPaginationItems(items);
