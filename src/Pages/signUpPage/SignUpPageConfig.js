@@ -1,9 +1,29 @@
 export const signupConfig = {
-    fullName: {
-        name: "fullName",
-        label: "Full Name",
+    title: {
+        name: "title",
+        label: "Title",
+        type: "select",
+        options: [
+            { label: "Select Title", value: "" },
+            { label: "Mr.", value: "mr" },
+            { label: "Mrs.", value: "mrs" },
+            { label: "Miss", value: "miss" },
+            { label: "Dr.", value: "dr" }
+        ],
+        required: true
+    },
+    firstName: {
+        name: "firstName",
+        label: "First Name",
         type: "text",
-        placeholder: "Enter your full name",
+        placeholder: "Enter your first name",
+        required: true
+    },
+    lastName: {
+        name: "lastName",
+        label: "Last Name",
+        type: "text",
+        placeholder: "Enter your last name",
         required: true
     },
     email: {
