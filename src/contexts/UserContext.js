@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Create a context for the user
 const UserContext = createContext();
@@ -11,11 +11,26 @@ export const UserProvider = ({ children }) => {
   // State to hold the current user information
   const [user, setUser] = useState(null);
 
-  // Function to set the user data (login)
-  const login = (userData) => setUser(userData);
-  
-  // Function to clear the user data (logout)
-  const logout = () => setUser(null);
+  // On component mount, check for user data in local storage
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  // Function to set the user data (login) and save to local storage
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  // Function to clear the user data (logout) and remove from local storage
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("authToken"); // Clear the token as well
+  };
 
   return (
     // Provide the user state and functions to the component tree
