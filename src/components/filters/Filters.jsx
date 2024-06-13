@@ -11,7 +11,7 @@ const Filters = ({ onFiltersChange }) => {
     const fetchFilters = async () => {
       try {
         const response = await fetch(
-          "https://spartacus-demo.eastus.cloudapp.azure.com:8443/occ/v2/apparel-uk-spa/products/search?fields=facets"
+          `${process.env.REACT_APP_BASE_URL}/products/search?fields=facets`
         );
         const data = await response.json();
         setFilters(data.facets || []);
@@ -55,7 +55,7 @@ const Filters = ({ onFiltersChange }) => {
   };
 
   return (
-    <div className="filters-container bg-gray-100 px-3 py-5 rounded-xl space-y-5">
+    <div className="filters-container bg-gray-100 px-4 py-5 rounded-xl space-y-5">
       {isLoading ? (
         <FiltersLoader />
       ) : (
@@ -63,7 +63,7 @@ const Filters = ({ onFiltersChange }) => {
           {filters
             .filter(
               (facet) =>
-                !["Price", "Size", "Category", "Brand", "Collection"].includes(
+                !["Price", "Resolution", "Megapixels"].includes(
                   facet.name
                 )
             )
