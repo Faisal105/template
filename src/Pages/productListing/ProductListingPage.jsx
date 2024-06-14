@@ -78,11 +78,18 @@ const ProductListingPage = () => {
 
   const handleAddToCart = (product, e) => {
     e.preventDefault();
-    addToCart(product);
-    setNotification({ message: "Product added to cart", type: "success" });
-    setTimeout(() => {
-      setNotification(null);
-    }, 1000);
+    addToCart(product)
+      .then(() => {
+        setNotification({ message: "Product added to cart", type: "success" });
+      })
+      .catch((error) => {
+        setNotification({ message: error.message, type: "error" });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setNotification(null);
+        }, 1000);
+      });
   };
 
   const handleIncrease = (product) => {
@@ -154,9 +161,8 @@ const ProductListingPage = () => {
                             {/* <Text>Rating : {product.rating.rate}</Text> */}
                           </div>
                         </Link>
-                        {cartItems.some(
-                          (item) => item.code === product.code
-                        ) ? (
+                        {Array.isArray(cartItems) &&
+                        cartItems.some((item) => item.code === product.code) ? (
                           <Counter
                             quantity={
                               cartItems.find(
