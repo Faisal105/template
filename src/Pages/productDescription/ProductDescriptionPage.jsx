@@ -72,7 +72,7 @@ const ProductDescriptionPage = () => {
             <div>
               <Card key={product.id} customClasses="flex items-center">
                 <Image
-                  src={`https://spartacus-demo.eastus.cloudapp.azure.com:8443/${product?.firstVariantImage}`}
+                  src={`https://spartacus-demo.eastus.cloudapp.azure.com:8443/${product?.images[0]?.url}`}
                   alt={product.name}
                   customClasses="max-w-full h-auto"
                 />
@@ -137,7 +137,7 @@ export const ProductDetailPageLoaders = async ({ request, params }) => {
   try {
     // Fetch product data from API
     const response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/products/${params.productId}`
+      `${process.env.REACT_APP_BASE_URL}/products/${params.productId}?fields=FULL`
     );
     const data = await response.json();
     return data;
