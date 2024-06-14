@@ -38,9 +38,7 @@ const Carousel = ({ heading, products:{products} }) => {
                   key={product.code}
                   customClasses="hover:shadow-lg w-96 rounded-xl space-y-4"
                 >
-                  <Link
-                    to={`/Open-Catalogue/Components/Power-Supplies/Power-Adapters-%26-Inverters/AC-Adapter-AC-L200/p/${product.code}`}
-                  >
+                  <Link to={`/ProductDescriptionPage/${product.code}`}>
                     <div className="w-full h-48 flex items-center justify-center">
                       {/* Product image */}
                       <Image
